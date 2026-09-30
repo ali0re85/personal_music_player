@@ -11,7 +11,10 @@ import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/services/audio_service.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({super.key, this.track});
+
+  /// اگه null باشه (باز کردن از مینی پلیر)، آهنگ فعلی ادامه پیدا می‌کنه.
+  final Track? track;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -73,7 +76,25 @@ class _MainScreenState extends State<MainScreen>
       }),
     );
 
-    _loadTrack(0);
+    _playPauseController.value = _audioService.isPlaying ? 1 : 0;
+
+    final requested = widget.track;
+    final current = _playerController.currentTrack;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      if (requested != null) {
+        if (requested.id != current?.id) {
+          final idx = _playerController.tracks.indexWhere(
+            (t) => t.id == requested.id,
+          );
+          _loadTrack(idx < 0 ? 0 : idx);
+        }
+      } else if (current == null) {
+        _loadTrack(0);
+      }
+    });
   }
 
   @override
@@ -83,8 +104,6 @@ class _MainScreenState extends State<MainScreen>
     }
 
     _playPauseController.dispose();
-    _audioService.pause();
-    _audioService.seek(Duration.zero);
 
     super.dispose();
   }
@@ -348,7 +367,7 @@ class _MainScreenState extends State<MainScreen>
   Widget _buildCover() {
     return StreamBuilder<bool>(
       stream: _audioService.playingStream,
-      initialData: false,
+      initialData: _audioService.isPlaying,
       builder: (context, snapshot) {
         final playing = snapshot.data ?? false;
 
@@ -460,6 +479,7 @@ class _MainScreenState extends State<MainScreen>
   Widget _buildSeekBar() {
     return StreamBuilder<Duration?>(
       stream: _audioService.durationStream,
+      initialData: _audioService.player.duration,
       builder: (context, durationSnap) {
         final total = durationSnap.data ?? Duration.zero;
 
@@ -650,6 +670,31 @@ class _MainScreenState extends State<MainScreen>
           ),
         );
       },
-    )
+    );
   }
+} // ← پایان کلاس _MainScreenState
+
+/// مسیر باز شدن صفحه‌ی پلینگ با انیمیشن slide-up.
+/// از home_screen.dart و mini_player.dart صدا زده میشه.
+Route<void> musicScreenRoute({Track? track}) {
+  return PageRouteBuilder<void>(
+    transitionDuration: const Duration(milliseconds: 400),
+    reverseTransitionDuration: const Duration(milliseconds: 350),
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        MainScreen(track: track),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final curved = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
+      );
+      return SlideTransition(
+        position: Tween(
+          begin: const Offset(0, 1),
+          end: Offset.zero,
+        ).animate(curved),
+        child: child,
+      );
+    },
+  );
 }

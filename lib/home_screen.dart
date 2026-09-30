@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/.music_screen.dart';
-import 'package:music_player/data/models/track.dart';
+import 'package:music_player/controller/player_controller.dart';
+import 'package:music_player/features/widgets/mini_player.dart';
 import 'package:music_player/gen/assets.gen.dart';
-import 'package:music_player/main.dart';
+import 'package:music_player/music_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,6 +11,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        bottomNavigationBar: const MiniPlayer(),
         body: Column(
           children: [
             Padding(
@@ -182,9 +183,10 @@ class HomeScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return ListTile(
                     onTap: () {
+                      final tracks = PlayerController.instance.tracks;
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>MainScreen ()),
+                        musicScreenRoute(track: tracks[index % tracks.length]),
                       );
                     },
                     leading: Container(
