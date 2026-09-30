@@ -30,6 +30,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Vector.svg
   SvgGenImage get vector => const SvgGenImage('assets/icons/Vector.svg');
 
+  /// File path: assets/icons/app_icon.png
+  AssetGenImage get appIcon => const AssetGenImage('assets/icons/app_icon.png');
+
   /// File path: assets/icons/cover.jpg
   AssetGenImage get cover => const AssetGenImage('assets/icons/cover.jpg');
 
@@ -39,6 +42,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/logo.svg
   SvgGenImage get logo => const SvgGenImage('assets/icons/logo.svg');
+
+  /// File path: assets/icons/music_player.png
+  AssetGenImage get musicPlayer =>
+      const AssetGenImage('assets/icons/music_player.png');
 
   /// File path: assets/icons/profile_image.jpg
   AssetGenImage get profileImage =>
@@ -50,9 +57,11 @@ class $AssetsIconsGen {
     categories,
     search,
     vector,
+    appIcon,
     cover,
     imagineDragonsTakeItEasy,
     logo,
+    musicPlayer,
     profileImage,
   ];
 }

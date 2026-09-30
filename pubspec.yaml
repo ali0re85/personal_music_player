@@ -37,6 +37,7 @@ dependencies:
   just_audio: ^0.10.6
   google_fonts: ^8.2.1
   flutter_svg: ^2.3.0
+  
 
 dev_dependencies:
   build_runner: ^2.12.0
@@ -50,6 +51,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -93,3 +95,12 @@ flutter:
 flutter_gen:
   integrations:
     flutter_svg: true
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/music_player.png"
+  min_sdk_android: 21
+  
+  # تنظیمات آیکون تطبیق‌پذیر اندروید (Adaptive Icon)
+  adaptive_icon_background: "#121324" # کد رنگ پس‌زمینه (سورمه‌ای/بنفش تیره متناسب با آیکون)
+  adaptive_icon_foreground: "assets/icons/music_player.png"
