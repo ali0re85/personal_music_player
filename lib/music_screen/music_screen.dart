@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/controller/player_controller.dart';
 import 'package:music_player/data/models/track.dart';
-import 'package:music_player/music_screen/bloc/music_screen_bloc.dart';
 import 'package:music_player/music_screen/widgets/player_background.dart';
 import 'package:music_player/music_screen/widgets/player_cover.dart';
 import 'package:music_player/music_screen/widgets/player_header.dart';
@@ -71,29 +69,3 @@ class MainScreen extends StatelessWidget {
   }
 }
 
-/// مسیر باز شدن صفحه‌ی پلینگ با انیمیشن slide-up.
-/// از home_screen.dart و mini_player.dart صدا زده میشه.
-Route<void> musicScreenRoute() {
-  return PageRouteBuilder<void>(
-    transitionDuration: const Duration(milliseconds: 400),
-    reverseTransitionDuration: const Duration(milliseconds: 350),
-    pageBuilder: (context, animation, secondaryAnimation) => BlocProvider(
-      create: (_) => MusicScreenBloc(),
-      child: const MainScreen(),
-    ),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      final curved = CurvedAnimation(
-        parent: animation,
-        curve: Curves.easeOutCubic,
-        reverseCurve: Curves.easeInCubic,
-      );
-      return SlideTransition(
-        position: Tween(
-          begin: const Offset(0, 1),
-          end: Offset.zero,
-        ).animate(curved),
-        child: child,
-      );
-    },
-  );
-}

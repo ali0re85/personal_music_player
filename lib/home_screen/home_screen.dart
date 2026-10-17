@@ -6,7 +6,7 @@ import 'package:music_player/data/models/track_cover.dart';
 import 'package:music_player/features/widgets/mini_player.dart';
 import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/home_screen/bloc/bloc/home_screen_bloc.dart';
-import 'package:music_player/music_screen/music_screen.dart';
+import 'package:music_player/music_screen/music_screen_route.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
