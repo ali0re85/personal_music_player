@@ -2,15 +2,24 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:music_player/home_screen.dart';
+import 'package:music_player/home_screen/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // فقط حالت عمودی + آیکون‌های روشن استاتوس‌بار
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark, // اندروید
+      statusBarBrightness: Brightness.light, // iOS
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
 
   runApp(const MyApp());
 }
@@ -30,12 +39,9 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.deepPurple,
           brightness: Brightness.light,
         ),
-        textTheme: TextTheme(
-          titleMedium: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold
-          )
-        )
+        textTheme: const TextTheme(
+          titleMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
       ),
       home: const HomeScreen(),
     );

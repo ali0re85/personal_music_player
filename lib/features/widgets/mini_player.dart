@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/player_controller.dart';
 import 'package:music_player/data/models/track.dart';
-import 'package:music_player/music_screen.dart';
+import 'package:music_player/data/models/track_cover.dart';
+import 'package:music_player/music_screen/music_screen.dart';
 import 'package:music_player/services/audio_service.dart';
 
 class MiniPlayer extends StatelessWidget {
@@ -36,26 +37,8 @@ class _MiniPlayerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final audio = AudioService.instance;
     final controller = PlayerController.instance;
     final cs = Theme.of(context).colorScheme;
-
-    Future<void> next() async {
-      if (controller.tracks.length <= 1) {
-        audio.seek(Duration.zero);
-        return;
-      }
-      await controller.next();
-    }
-
-    Future<void> previous() async {
-      if (controller.tracks.length <= 1 ||
-          audio.position > const Duration(seconds: 3)) {
-        audio.seek(Duration.zero);
-        return;
-      }
-      await controller.previous();
-    }
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -108,7 +91,7 @@ class _MiniPlayerCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        track.artist,
+                        track.id.toString(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -120,9 +103,15 @@ class _MiniPlayerCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                _RoundButton(icon: Icons.skip_previous_rounded, onTap: previous),
+                _RoundButton(
+                  icon: Icons.skip_previous_rounded,
+                  onTap: controller.previous,
+                ),
                 const SizedBox(width: 10),
-                _RoundButton(icon: Icons.skip_next_rounded, onTap: next),
+                _RoundButton(
+                  icon: Icons.skip_next_rounded,
+                  onTap: controller.next,
+                ),
               ],
             ),
           ],
@@ -157,11 +146,7 @@ class _CoverPlayButton extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 ClipOval(
-                  child: track.cover.image(
-                    width: 56,
-                    height: 56,
-                    fit: BoxFit.cover,
-                  ),
+                  child: TrackCover(track: track, width: 56, height: 56),
                 ),
                 Positioned.fill(
                   child: DecoratedBox(
