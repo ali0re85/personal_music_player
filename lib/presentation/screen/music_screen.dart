@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/player_controller.dart';
 import 'package:music_player/data/models/track.dart';
-import 'package:music_player/music_screen/widgets/player_background.dart';
-import 'package:music_player/music_screen/widgets/player_cover.dart';
-import 'package:music_player/music_screen/widgets/player_header.dart';
-import 'package:music_player/music_screen/widgets/player_panel.dart';
+import 'package:music_player/presentation/widget/player_background.dart';
+import 'package:music_player/presentation/widget/player_cover.dart';
+import 'package:music_player/presentation/widget/player_header.dart';
+import 'package:music_player/presentation/widget/player_panel.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});

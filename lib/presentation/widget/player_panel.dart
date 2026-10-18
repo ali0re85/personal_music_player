@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:music_player/data/models/track.dart';
-import 'package:music_player/music_screen/widgets/player_controls.dart';
-import 'package:music_player/music_screen/widgets/player_seek_bar.dart';
-import 'package:music_player/music_screen/widgets/player_track_info.dart';
+import 'package:music_player/presentation/widget/player_controls.dart';
+import 'package:music_player/presentation/widget/player_seek_bar.dart';
+import 'package:music_player/presentation/widget/player_track_info.dart';
 
 /// پنل شیشه‌ای پایین
 class PlayerPanel extends StatelessWidget {

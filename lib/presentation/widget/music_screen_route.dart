@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/music_screen/bloc/music_screen_bloc.dart';
-import 'package:music_player/music_screen/music_screen.dart';
+import 'package:music_player/presentation/logic/music_screen_bloc.dart';
+import 'package:music_player/presentation/screen/music_screen.dart';
 
 /// مسیر باز شدن صفحه‌ی پلینگ (اسلاید از پایین + کشیدن به پایین برای بستن).
 /// از home_screen.dart و mini_player.dart صدا زده میشه.

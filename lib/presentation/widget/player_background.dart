@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:music_player/data/models/track.dart';
-import 'package:music_player/data/models/track_cover.dart';
+import 'package:music_player/presentation/widget/track_cover.dart';
 
 /// پس‌زمینه‌ی محو شده از روی کاور
 class PlayerBackground extends StatelessWidget {

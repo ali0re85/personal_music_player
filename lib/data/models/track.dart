@@ -1,4 +1,3 @@
-
 class Track {
   const Track({
     required this.id,

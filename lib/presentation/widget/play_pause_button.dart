@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/music_screen/bloc/music_screen_bloc.dart';
+import 'package:music_player/presentation/logic/music_screen_bloc.dart';
 import 'package:music_player/services/audio_service.dart';
 
 class PlayPauseButton extends StatefulWidget {

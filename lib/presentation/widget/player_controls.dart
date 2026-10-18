@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player/music_screen/bloc/music_screen_bloc.dart';
-import 'package:music_player/music_screen/widgets/play_pause_button.dart';
+import 'package:music_player/presentation/logic/music_screen_bloc.dart';
+import 'package:music_player/presentation/widget/play_pause_button.dart';
 
 class PlayerControls extends StatelessWidget {
   const PlayerControls({super.key});
