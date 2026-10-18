@@ -5,6 +5,13 @@ class MusicPaginationEntity {
   final int page;
   final int perPage;
   final int count;
+  final int pageCount;
 
-  new({required this.items, required this.page, required this.perPage, required this.count});
+  new({
+    required this.items,
+    required this.page,
+    required this.perPage,
+    required this.count,
+    required this.pageCount,
+  });
 }

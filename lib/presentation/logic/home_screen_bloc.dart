@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:music_player/data/models/track.dart';
-import 'package:music_player/services/media_service.dart';
+import 'package:music_player/data/data_source/offline/media_service.dart';
 
 part 'home_screen_event.dart';
 part 'home_screen_state.dart';

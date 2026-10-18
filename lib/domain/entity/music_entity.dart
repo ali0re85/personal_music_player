@@ -5,13 +5,15 @@ class MusicEntity {
   final int duration;
   final String? uri;
   final String? url;
+  final String? path;
 
-  MusicEntity(
-    {this.coverImageFile,
+  MusicEntity({
+    this.coverImageFile,
     this.coverImageUrl,
     required this.title,
     required this.duration,
     this.uri,
-    this.url,}
-  );
+    this.url,
+    this.path,
+  });
 }

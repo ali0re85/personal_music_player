@@ -1,3 +1,5 @@
+import 'package:music_player/domain/entity/music_entity.dart';
+
 class Track {
   const Track({
     required this.id,
@@ -5,8 +7,7 @@ class Track {
     required this.uri,
     this.path,
     required this.duration,
-    this.cover
-    
+    this.cover,
   });
 
   final int id;
@@ -15,4 +16,12 @@ class Track {
   final String? path;
   final int duration;
   final String? cover;
+
+  MusicEntity toEntity() => MusicEntity(
+    title: title,
+    duration: duration,
+    coverImageFile: cover,
+    uri: uri,
+    path: path,
+  );
 }
