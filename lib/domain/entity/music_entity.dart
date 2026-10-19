@@ -6,6 +6,7 @@ class MusicEntity {
   final String? uri;
   final String? url;
   final String? path;
+  final int id;
 
   MusicEntity({
     this.coverImageFile,
@@ -15,5 +16,6 @@ class MusicEntity {
     this.uri,
     this.url,
     this.path,
+    required this.id,
   });
 }

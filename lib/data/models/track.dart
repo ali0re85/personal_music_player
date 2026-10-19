@@ -23,5 +23,6 @@ class Track {
     coverImageFile: cover,
     uri: uri,
     path: path,
+    id: id,
   );
 }

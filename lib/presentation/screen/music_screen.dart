@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/player_controller.dart';
-import 'package:music_player/data/models/track.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/presentation/widget/player_background.dart';
 import 'package:music_player/presentation/widget/player_cover.dart';
 import 'package:music_player/presentation/widget/player_header.dart';
@@ -30,7 +30,7 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildScaffold(Track track, bool hasError) {
+  Widget _buildScaffold(MusicEntity track, bool hasError) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(

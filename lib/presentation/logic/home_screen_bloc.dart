@@ -1,17 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:music_player/data/models/track.dart';
-import 'package:music_player/data/data_source/offline/media_service.dart';
-import 'package:music_player/data/repository/music_repository_offline.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/domain/repository/music_repository.dart';
 
 part 'home_screen_event.dart';
 part 'home_screen_state.dart';
 
 class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
-  final MusicRepository musicRepository = MusicRepositoryOffline();
 
-  HomeScreenBloc() : super(HomeScreenInitial()) {
+  final MusicRepository musicRepository;
+
+  HomeScreenBloc({required this.musicRepository}) : super(HomeScreenInitial()) {
     on<HomeScreenSongsRequested>((event, emit) async {
       await _load(emit);
     });
@@ -21,21 +20,19 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     });
   }
 
-  final MediaService mediaService = MediaService();
-  int totalCount = 0;
   Future<void> _load(Emitter<HomeScreenState> emit) async {
     emit(HomeScreenLoading());
 
     try {
-      final result = await mediaService.getSongs(page: 0, perPage: 100);
+      final result = await musicRepository.getMusic(page: 0, perPage: 100);
       final tracks = result.items;
 
       if (tracks.isEmpty) {
         emit(HomeScreenEmpty());
       } else {
-        totalCount = result.count;
         emit(
           HomeScreenSuccess(
+            totalCount: result.count,
             tracks,
             page: 0,
             hasMore: result.page < result.pageCount - 1,
@@ -58,7 +55,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
     try {
       final nextPage = current.page + 1;
-      final result = await mediaService.getSongs(page: nextPage, perPage: 100);
+      final result = await musicRepository.getMusic(page: nextPage, perPage: 100);
 
       emit(
         current.copyWith(

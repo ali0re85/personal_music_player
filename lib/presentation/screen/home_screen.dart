@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/controller/player_controller.dart';
+import 'package:music_player/locator.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/presentation/widget/mini_player.dart';
 import 'package:music_player/gen/assets.gen.dart';
@@ -15,7 +16,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeScreenBloc()..add(HomeScreenSongsRequested()),
+      create: (context) => HomeScreenBloc(musicRepository: locator())..add(HomeScreenSongsRequested()),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -205,7 +206,7 @@ class HomeScreen extends StatelessWidget {
                       BlocBuilder<HomeScreenBloc, HomeScreenState>(
                         builder: (context, state) {
                           final count = state is HomeScreenSuccess
-                              ? context.read<HomeScreenBloc>().totalCount
+                              ? state.totalCount
                               : 0;
 
                           return Text(

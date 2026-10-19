@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/controller/player_controller.dart';
-import 'package:music_player/data/models/track.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/presentation/widget/music_screen_route.dart';
 import 'package:music_player/services/audio_service.dart';
@@ -10,7 +10,7 @@ class MiniPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Track?>(
+    return ValueListenableBuilder<MusicEntity?>(
       valueListenable: PlayerController.instance.currentTrackNotifier,
       builder: (context, track, _) {
         return AnimatedSize(
@@ -29,7 +29,7 @@ class MiniPlayer extends StatelessWidget {
 class _MiniPlayerCard extends StatelessWidget {
   const _MiniPlayerCard({required this.track});
 
-  final Track track;
+  final MusicEntity track;
 
   void _open(BuildContext context) {
     Navigator.push(context, musicScreenRoute());
@@ -125,7 +125,7 @@ class _MiniPlayerCard extends StatelessWidget {
 class _CoverPlayButton extends StatelessWidget {
   const _CoverPlayButton({required this.track});
 
-  final Track track;
+  final MusicEntity track;
 
   @override
   Widget build(BuildContext context) {

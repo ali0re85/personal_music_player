@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:flutter/foundation.dart';
-import 'package:music_player/data/models/track.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 
 /// کاور آهنگ‌ها رو از تگ‌های داخل خود فایل (ID3 و ...) می‌خونه.
 /// نتیجه کش میشه که با اسکرول لیست، هر فایل فقط یک بار خونده بشه.
@@ -15,11 +15,11 @@ class CoverService {
   final Map<int, Future<Uint8List?>> _cache = {};
 
   /// بایت‌های عکس کاور، یا null اگه آهنگ کاور نداشت.
-  Future<Uint8List?> getCover(Track track) {
+  Future<Uint8List?> getCover(MusicEntity track) {
     return _cache.putIfAbsent(track.id, () => _read(track));
   }
 
-  Future<Uint8List?> _read(Track track) async {
+  Future<Uint8List?> _read(MusicEntity track) async {
     final path = track.path;
     if (path == null || path.isEmpty) return null;
 

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/data/models/track.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/services/cover_service.dart';
 
@@ -16,7 +16,7 @@ class TrackCover extends StatelessWidget {
     this.fit = BoxFit.cover,
   });
 
-  final Track track;
+  final MusicEntity track;
   final double? width;
   final double? height;
   final BoxFit fit;

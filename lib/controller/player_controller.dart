@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/data/models/track.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/services/audio_service.dart';
 
 /// تنها منبع حقیقت برای «لیست آهنگ‌ها» و «آهنگ فعلی».
@@ -26,22 +26,22 @@ class PlayerController {
 
   final AudioService _audioService = AudioService.instance;
 
-  List<Track> _tracks = [];
-  List<Track> get tracks => List.unmodifiable(_tracks);
+  List<MusicEntity> _tracks = [];
+  List<MusicEntity> get tracks => List.unmodifiable(_tracks);
 
   int _currentIndex = -1;
   int get currentIndex => _currentIndex;
 
   /// مینی‌پلیر و صفحه‌ی پلیر به این گوش میدن. null یعنی هنوز آهنگی انتخاب نشده.
-  final ValueNotifier<Track?> currentTrackNotifier = ValueNotifier(null);
-  Track? get currentTrack => currentTrackNotifier.value;
+  final ValueNotifier<MusicEntity?> currentTrackNotifier = ValueNotifier(null);
+  MusicEntity? get currentTrack => currentTrackNotifier.value;
 
   /// true یعنی لود آهنگ فعلی با خطا مواجه شد
   final ValueNotifier<bool> hasError = ValueNotifier(false);
 
   /// لیست آهنگ‌ها رو ست می‌کنه و آهنگ [index] رو پخش می‌کنه.
   Future<void> setQueue(
-    List<Track> tracks,
+    List<MusicEntity> tracks,
     int index, {
     bool autoPlay = true,
   }) async {

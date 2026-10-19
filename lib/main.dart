@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:music_player/locator.dart';
 import 'package:music_player/presentation/screen/home_screen.dart';
 
 Future<void> main() async {
@@ -20,6 +21,8 @@ Future<void> main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
+
+  setupDependencyInjection();
 
   runApp(const MyApp());
 }

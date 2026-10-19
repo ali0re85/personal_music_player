@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/data/models/track.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 
 class PlayerTrackInfo extends StatelessWidget {
   const PlayerTrackInfo({
@@ -8,7 +8,7 @@ class PlayerTrackInfo extends StatelessWidget {
     required this.hasError,
   });
 
-  final Track track;
+  final MusicEntity track;
   final bool hasError;
 
   @override
@@ -36,7 +36,7 @@ class PlayerTrackInfo extends StatelessWidget {
             const SizedBox(height: 4),
 
             Text(
-              hasError ? 'Could not load this track.' : track.uri,
+              hasError ? 'Could not load this track.' : (track.uri??""),
               style: TextStyle(
                 color: hasError ? Colors.redAccent : Colors.white70,
                 fontSize: 13,

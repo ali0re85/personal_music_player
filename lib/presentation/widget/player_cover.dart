@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/data/models/track.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/services/audio_service.dart';
 
 class PlayerCover extends StatelessWidget {
   const PlayerCover({super.key, required this.track});
 
-  final Track track;
+  final MusicEntity track;
 
   @override
   Widget build(BuildContext context) {
