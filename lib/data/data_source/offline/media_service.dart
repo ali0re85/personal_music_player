@@ -18,8 +18,7 @@ class MediaService {
     // Get the total number of audio files.
     final totalCount = await _mediaManager.getMediaCount(type: MediaType.audio);
 
-    const pageSize = 100;
-    final pageCount = (totalCount / pageSize).ceil();
+    final pageCount = (totalCount / perPage).ceil();
 
     if (totalCount == 0) {
       return TrackPaginationModel(
@@ -45,7 +44,7 @@ class MediaService {
     final mediaItems = await _mediaManager.getMediaPage(
       type: MediaType.audio,
       page: page,
-      pageSize: pageSize,
+      pageSize: perPage,
     );
 
     tracks.addAll(

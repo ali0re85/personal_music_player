@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -204,7 +205,7 @@ class HomeScreen extends StatelessWidget {
                       BlocBuilder<HomeScreenBloc, HomeScreenState>(
                         builder: (context, state) {
                           final count = state is HomeScreenSuccess
-                              ? state.tracks.length
+                              ? context.read<HomeScreenBloc>().totalCount
                               : 0;
 
                           return Text(
@@ -237,46 +238,69 @@ class HomeScreen extends StatelessWidget {
                         case HomeScreenSuccess():
                           final tracks = state.tracks;
 
-                          return ListView.builder(
-                            padding: const EdgeInsets.only(top: 12),
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: tracks.length,
-                            itemBuilder: (context, index) {
-                              final track = tracks[index];
+                          return NotificationListener<ScrollNotification>(
+                            onNotification: (notification) {
+                              final metrics = notification.metrics;
+                              if (metrics.pixels >=
+                                  metrics.maxScrollExtent - 200) {
+                                context.read<HomeScreenBloc>().add(
+                                  HomeScreenNextPageRequested(),
+                                );
+                              }
+                              return false;
+                            },
+                            child: ListView.builder(
+                              padding: const EdgeInsets.only(top: 12),
+                              physics: const BouncingScrollPhysics(),
+                              itemCount:
+                                  tracks.length + (state.isLoadingMore ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                if (index == tracks.length) {
+                                  return Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                                final track = tracks[index];
 
-                              return ListTile(
-                                onTap: () {
-                                  final controller = PlayerController.instance;
+                                return ListTile(
+                                  onTap: () {
+                                    final controller =
+                                        PlayerController.instance;
 
-                                  if (controller.currentTrack?.id != track.id) {
-                                    controller.setQueue(tracks, index);
-                                  }
+                                    if (controller.currentTrack?.id !=
+                                        track.id) {
+                                      controller.setQueue(tracks, index);
+                                    }
 
-                                  Navigator.push(context, musicScreenRoute());
-                                },
-                                leading: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.shade400,
-                                        blurRadius: 10,
+                                    Navigator.push(context, musicScreenRoute());
+                                  },
+                                  leading: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.shade400,
+                                          blurRadius: 10,
+                                        ),
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: TrackCover(
+                                        track: track,
+                                        width: 56,
+                                        height: 56,
                                       ),
-                                    ],
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: TrackCover(
-                                      track: track,
-                                      width: 56,
-                                      height: 56,
                                     ),
                                   ),
-                                ),
-                                title: Text(track.title),
-                                subtitle: Text(track.id.toString()),
-                              );
-                            },
+                                  title: Text(track.title),
+                                  subtitle: Text(track.id.toString()),
+                                );
+                              },
+                            ),
                           );
                       }
                     },

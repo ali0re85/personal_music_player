@@ -4,3 +4,5 @@ part of 'home_screen_bloc.dart';
 sealed class HomeScreenEvent {}
 
 class HomeScreenSongsRequested extends HomeScreenEvent {}
+
+class HomeScreenNextPageRequested extends HomeScreenEvent{}
