@@ -42,10 +42,17 @@ dependencies:
   flutter_bloc: ^9.1.1
   provider: ^6.1.5+1
   get_it: ^9.3.0
-  
+  retrofit: ^4.9.0
+  logger: ^2.6.0
+  json_annotation: ^4.9.0
+  dio: ^5.11.1
 
 dev_dependencies:
   build_runner: ^2.12.0
+  retrofit_generator: ^10.0.1
+  json_serializable: ^6.10.0
+
+
   flutter_gen_runner:
   flutter_test:
     sdk: flutter
@@ -105,7 +112,7 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icons/music_player.png"
   min_sdk_android: 21
-  
+
   # تنظیمات آیکون تطبیق‌پذیر اندروید (Adaptive Icon)
   adaptive_icon_background: "#121324" # کد رنگ پس‌زمینه (سورمه‌ای/بنفش تیره متناسب با آیکون)
   adaptive_icon_foreground: "assets/icons/music_player.png"

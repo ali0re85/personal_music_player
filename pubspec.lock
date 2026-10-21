@@ -169,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  code_builder:
+    dependency: transitive
+    description:
+      name: code_builder
+      sha256: "811709c1badd02fc054039a13f66e0db1961865f9a314175f68c3eaeebec786f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.13.0"
   collection:
     dependency: transitive
     description:
@@ -225,6 +233,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      sha256: "852ec3b48cc431ac04fff978413c541502b67ffc3e26921e74e3d994694192c1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.11.1"
+  dio_web_adapter:
+    dependency: transitive
+    description:
+      name: dio_web_adapter
+      sha256: "3a1b2cd7be71086f38504956e3ebcd2837288d231ff454bafa78021244102bfc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.2"
   fake_async:
     dependency: transitive
     description:
@@ -449,13 +473,21 @@ packages:
     source: hosted
     version: "1.0.0"
   json_annotation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: json_annotation
       sha256: "2a743920d81b7910627f68ee2c9ac1fc0bfee32b9fc3403587d7c6791ca12f80"
       url: "https://pub.dev"
     source: hosted
     version: "4.12.0"
+  json_serializable:
+    dependency: "direct dev"
+    description:
+      name: json_serializable
+      sha256: "3b177bc10ac583af8770ef514abc3287a972776194d0ef21310e3a4312fd0f33"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.15.1"
   just_audio:
     dependency: "direct main"
     description:
@@ -512,6 +544,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.0"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      sha256: "2a0dc097e7b01d942475bdd552356db2d0f768b05540bd4b2b53f1840f2239a7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.8.0"
   logging:
     dependency: transitive
     description:
@@ -688,6 +728,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.5.2"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      sha256: "13b6717366aa7ec3792dd62c19c7d33a785708224365f2db23c5ca01f1c1a0f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0"
   provider:
     dependency: "direct main"
     description:
@@ -720,6 +768,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  retrofit:
+    dependency: "direct main"
+    description:
+      name: retrofit
+      sha256: d700c1e7599bc6327cbe19ec7a2c87b595f6063ce888e8015f30cab655972331
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.10.0"
+  retrofit_generator:
+    dependency: "direct dev"
+    description:
+      name: retrofit_generator
+      sha256: "3b55440492504b5919dd16d0688cd46ba93e6515b76763e104a49f871de5d425"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.3.2"
   rxdart:
     dependency: transitive
     description:
@@ -749,6 +813,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  source_gen:
+    dependency: transitive
+    description:
+      name: source_gen
+      sha256: "833ea7d15b5be79949d3d6c077da0267a0bd93c16897b36a771395a91e63086e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.1"
+  source_helper:
+    dependency: transitive
+    description:
+      name: source_helper
+      sha256: "279126bce72de3f2b7d4756408a4157988cf6bb4815be551bf55851aa00e9984"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   source_span:
     dependency: transitive
     description:

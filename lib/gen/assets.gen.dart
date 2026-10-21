@@ -66,7 +66,9 @@ class $AssetsIconsGen {
   ];
 }
 
-abstract final class Assets {
+class Assets {
+  const Assets._();
+
   static const $AssetsIconsGen icons = $AssetsIconsGen();
 }
 
