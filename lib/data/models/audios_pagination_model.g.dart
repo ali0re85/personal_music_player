@@ -46,11 +46,13 @@ const _$AudiosPaginationModelJsonSchema = {
     'AudiosTrackModel': {
       'type': 'object',
       'properties': {
+        'track_id': {'type': 'integer'},
         'title': {'type': 'string'},
         'stream': {r'$ref': r'#/$defs/AudiosStreamModel'},
         'artwork': {r'$ref': r'#/$defs/AudioArtworkModel'},
+        'duration': {'type': 'integer'},
       },
-      'required': ['title', 'stream', 'artwork'],
+      'required': ['track_id', 'title', 'stream', 'artwork', 'duration'],
     },
   },
 };

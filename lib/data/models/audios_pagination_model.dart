@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:music_player/data/models/audios_track_model.dart';
+import 'package:music_player/domain/entity/music_pagination_entity.dart';
 
 part 'audios_pagination_model.g.dart';
 
@@ -14,4 +15,6 @@ class AudiosPaginationModel {
   Map<String, dynamic> toJson() => _$AudiosPaginationModelToJson(this);
 
   static const jsonSchema = _$AudiosPaginationModelJsonSchema;
+
+  MusicPaginationEntity toEntity()=> MusicPaginationEntity(items:data.map((e) => e.toEntity()).toList(), page: 1, perPage: 100, count: 100000, pageCount: 1000);
 }
