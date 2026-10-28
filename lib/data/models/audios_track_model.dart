@@ -10,8 +10,8 @@ class AudiosTrackModel {
   @JsonKey(name: 'track_id')
   final int trackId;
   final String title;
-  final AudiosStreamModel stream;
-  final AudioArtworkModel artwork;
+  final AudiosStreamModel? stream;
+  final AudioArtworkModel? artwork;
   final int duration;
 
   AudiosTrackModel({required this.title, required this.stream,required this.artwork, required this.duration, required this.trackId,});

@@ -10,11 +10,18 @@ class AudiosPaginationModel {
 
   AudiosPaginationModel({required this.data});
 
-  factory AudiosPaginationModel.fromJson(Map<String, dynamic> json) => _$AudiosPaginationModelFromJson(json);
+  factory AudiosPaginationModel.fromJson(Map<String, dynamic> json) =>
+      _$AudiosPaginationModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AudiosPaginationModelToJson(this);
 
   static const jsonSchema = _$AudiosPaginationModelJsonSchema;
 
-  MusicPaginationEntity toEntity()=> MusicPaginationEntity(items:data.map((e) => e.toEntity()).toList(), page: 1, perPage: 100, count: 100000, pageCount: 1000);
+  MusicPaginationEntity toEntity() => MusicPaginationEntity(
+    items: data.where((e) => e.stream != null).map((e) => e.toEntity()).toList(),
+    page: 1,
+    perPage: 100,
+    count: 100000,
+    pageCount: 1000,
+  );
 }

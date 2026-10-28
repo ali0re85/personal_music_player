@@ -6,15 +6,18 @@ part of 'audios_track_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AudiosTrackModel _$AudiosTrackModelFromJson(
-  Map<String, dynamic> json,
-) => AudiosTrackModel(
-  title: json['title'] as String,
-  stream: AudiosStreamModel.fromJson(json['stream'] as Map<String, dynamic>),
-  artwork: AudioArtworkModel.fromJson(json['artwork'] as Map<String, dynamic>),
-  duration: (json['duration'] as num).toInt(),
-  trackId: (json['track_id'] as num).toInt(),
-);
+AudiosTrackModel _$AudiosTrackModelFromJson(Map<String, dynamic> json) =>
+    AudiosTrackModel(
+      title: json['title'] as String,
+      stream: json['stream'] == null
+          ? null
+          : AudiosStreamModel.fromJson(json['stream'] as Map<String, dynamic>),
+      artwork: json['artwork'] == null
+          ? null
+          : AudioArtworkModel.fromJson(json['artwork'] as Map<String, dynamic>),
+      duration: (json['duration'] as num).toInt(),
+      trackId: (json['track_id'] as num).toInt(),
+    );
 
 Map<String, dynamic> _$AudiosTrackModelToJson(AudiosTrackModel instance) =>
     <String, dynamic>{
