@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:music_player/data/models/audios_artwork_model.dart';
-import 'package:music_player/data/models/audios_stream_model.dart';
+import 'package:music_player/data/models/audios_models/audios_artwork_model.dart';
+import 'package:music_player/data/models/audios_models/audios_stream_model.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 
 part 'audios_track_model.g.dart';

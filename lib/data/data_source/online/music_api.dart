@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:music_player/data/models/audios_pagination_model.dart';
+import 'package:music_player/data/models/audios_models/audios_pagination_model.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 

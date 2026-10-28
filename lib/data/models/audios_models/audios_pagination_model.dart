@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:music_player/data/models/audios_track_model.dart';
+import 'package:music_player/data/models/audios_models/audios_track_model.dart';
 import 'package:music_player/domain/entity/music_pagination_entity.dart';
 
 part 'audios_pagination_model.g.dart';
