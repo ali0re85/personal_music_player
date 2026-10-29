@@ -42,6 +42,13 @@ const _$AudiosResponseModelJsonSchema = {
       },
       'required': ['480x480'],
     },
+    'AudiosUserModel': {
+      'type': 'object',
+      'properties': {
+        'name': {'type': 'string'},
+      },
+      'required': ['name'],
+    },
     'AudiosTrackModel': {
       'type': 'object',
       'properties': {
@@ -50,8 +57,16 @@ const _$AudiosResponseModelJsonSchema = {
         'stream': {r'$ref': r'#/$defs/AudiosStreamModel'},
         'artwork': {r'$ref': r'#/$defs/AudioArtworkModel'},
         'duration': {'type': 'integer'},
+        'user': {r'$ref': r'#/$defs/AudiosUserModel'},
       },
-      'required': ['track_id', 'title', 'stream', 'artwork', 'duration'],
+      'required': [
+        'track_id',
+        'title',
+        'stream',
+        'artwork',
+        'duration',
+        'user',
+      ],
     },
   },
 };

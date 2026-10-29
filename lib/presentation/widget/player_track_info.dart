@@ -36,7 +36,7 @@ class PlayerTrackInfo extends StatelessWidget {
             const SizedBox(height: 4),
 
             Text(
-              hasError ? 'Could not load this track.' : (track.uri??""),
+              hasError ? 'Could not load this track.' : (track.artist??""),
               style: TextStyle(
                 color: hasError ? Colors.redAccent : Colors.white70,
                 fontSize: 13,

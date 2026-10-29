@@ -8,13 +8,17 @@ class AudioService {
 
   final AudioPlayer player = AudioPlayer();
 
-
   /// آهنگ‌ها از حافظه‌ی گوشی میان (نه از assets پروژه)،
   /// پس باید از uri یا path لود بشن، نه setAsset.
   Future<void> loadTrack(MusicEntity track, {bool autoPlay = true}) async {
+    if (track.url != null) {
+      await player.setAudioSource(AudioSource.uri(Uri.parse(track.url!)));
+      if (autoPlay) player.play();
+      return;
+    }
     try {
       final uri = track.uri;
-      if (uri==null) throw StateError('uri is null');
+      if (uri == null) throw StateError('uri is null');
       await player.setAudioSource(AudioSource.uri(Uri.parse(uri)));
     } catch (_) {
       // اگه uri کار نکرد، با مسیر فایل امتحان می‌کنیم

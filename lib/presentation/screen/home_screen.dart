@@ -298,7 +298,7 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                   title: Text(track.title),
-                                  subtitle: Text(track.id.toString()),
+                                  subtitle: Text(track.artist ?? ''),
                                 );
                               },
                             ),

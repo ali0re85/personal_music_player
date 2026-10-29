@@ -5,8 +5,6 @@ import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/services/cover_service.dart';
 
-/// کاور آهنگ. اگه آهنگ کاور داشت اونو نشون میده،
-/// وگرنه (یا تا وقتی لود میشه) عکس پیش‌فرض پروژه.
 class TrackCover extends StatelessWidget {
   const TrackCover({
     super.key,
@@ -27,8 +25,19 @@ class TrackCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final coverUrl = track.coverImageUrl;
+    if (coverUrl != null) {
+      return Image.network(
+        coverUrl,
+        cacheWidth: 800,
+        width: width,
+        height: height,
+        fit: fit,
+        gaplessPlayback: true,
+        errorBuilder: (context, error, stackTrace) => _fallback(),
+      );
+    }
     return FutureBuilder<Uint8List?>(
-      // key باعث میشه با عوض شدن آهنگ، کاور هم دوباره لود بشه
       key: ValueKey(track.id),
       future: CoverService.instance.getCover(track),
       builder: (context, snapshot) {

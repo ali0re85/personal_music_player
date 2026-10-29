@@ -14,5 +14,5 @@ abstract class MusicApi {
   }) = _MusicApi;
   
   @GET('/tracks/search')
-  Future<AudiosPaginationModel> getTracks({@Query('query') String? query});
+  Future<AudiosPaginationModel> getTracks({@Query('query') String? query = 'hayedeh'});
 }

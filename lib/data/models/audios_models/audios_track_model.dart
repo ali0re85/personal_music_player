@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:music_player/data/models/audios_models/audios_artwork_model.dart';
 import 'package:music_player/data/models/audios_models/audios_stream_model.dart';
+import 'package:music_player/data/models/audios_models/audios_user_model.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 
 part 'audios_track_model.g.dart';
@@ -13,14 +14,30 @@ class AudiosTrackModel {
   final AudiosStreamModel? stream;
   final AudioArtworkModel? artwork;
   final int duration;
+  final AudiosUserModel? user;
 
-  AudiosTrackModel({required this.title, required this.stream,required this.artwork, required this.duration, required this.trackId,});
+  AudiosTrackModel({
+    required this.title,
+    required this.stream,
+    required this.artwork,
+    required this.duration,
+    required this.trackId,
+    required this.user,
+  });
 
-  factory AudiosTrackModel.fromJson(Map<String, dynamic> json) => _$AudiosTrackModelFromJson(json);
+  factory AudiosTrackModel.fromJson(Map<String, dynamic> json) =>
+      _$AudiosTrackModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AudiosTrackModelToJson(this);
 
   static const jsonSchema = _$AudiosTrackModelJsonSchema;
 
-  MusicEntity toEntity()=>MusicEntity(title: title, duration: duration, id: trackId);
+  MusicEntity toEntity() => MusicEntity(
+    title: title,
+    duration: duration,
+    id: trackId,
+    url: stream?.url,
+    coverImageUrl: artwork?.url,
+    artist: user?.name,
+  );
 }

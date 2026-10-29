@@ -23,7 +23,7 @@ class _MusicApi implements MusicApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<AudiosPaginationModel> getTracks({String? query}) async {
+  Future<AudiosPaginationModel> getTracks({String? query = 'hayedeh'}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'query': query};
     queryParameters.removeWhere((k, v) => v == null);

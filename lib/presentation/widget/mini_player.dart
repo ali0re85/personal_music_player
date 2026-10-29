@@ -91,7 +91,7 @@ class _MiniPlayerCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        track.id.toString(),
+                        track.artist??"",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

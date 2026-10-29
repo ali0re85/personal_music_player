@@ -17,6 +17,9 @@ AudiosTrackModel _$AudiosTrackModelFromJson(Map<String, dynamic> json) =>
           : AudioArtworkModel.fromJson(json['artwork'] as Map<String, dynamic>),
       duration: (json['duration'] as num).toInt(),
       trackId: (json['track_id'] as num).toInt(),
+      user: json['user'] == null
+          ? null
+          : AudiosUserModel.fromJson(json['user'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AudiosTrackModelToJson(AudiosTrackModel instance) =>
@@ -26,6 +29,7 @@ Map<String, dynamic> _$AudiosTrackModelToJson(AudiosTrackModel instance) =>
       'stream': instance.stream,
       'artwork': instance.artwork,
       'duration': instance.duration,
+      'user': instance.user,
     };
 
 const _$AudiosTrackModelJsonSchema = {
@@ -37,8 +41,9 @@ const _$AudiosTrackModelJsonSchema = {
     'stream': {r'$ref': r'#/$defs/AudiosStreamModel'},
     'artwork': {r'$ref': r'#/$defs/AudioArtworkModel'},
     'duration': {'type': 'integer'},
+    'user': {r'$ref': r'#/$defs/AudiosUserModel'},
   },
-  'required': ['track_id', 'title', 'stream', 'artwork', 'duration'],
+  'required': ['track_id', 'title', 'stream', 'artwork', 'duration', 'user'],
   r'$defs': {
     'AudiosStreamModel': {
       'type': 'object',
@@ -53,6 +58,13 @@ const _$AudiosTrackModelJsonSchema = {
         '480x480': {'type': 'string'},
       },
       'required': ['480x480'],
+    },
+    'AudiosUserModel': {
+      'type': 'object',
+      'properties': {
+        'name': {'type': 'string'},
+      },
+      'required': ['name'],
     },
   },
 };

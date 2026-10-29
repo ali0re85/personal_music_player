@@ -24,5 +24,6 @@ class Track {
     uri: uri,
     path: path,
     id: id,
+    
   );
 }
