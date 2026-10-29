@@ -7,12 +7,18 @@ part 'music_api.g.dart';
 
 @RestApi(baseUrl: 'https://api.audius.co/v1')
 abstract class MusicApi {
-  factory MusicApi(
-    Dio dio, {
-    String? baseUrl,
-    ParseErrorLogger? errorLogger,
-  }) = _MusicApi;
-  
+  factory MusicApi(Dio dio, {String? baseUrl, ParseErrorLogger? errorLogger}) =
+      _MusicApi;
+
   @GET('/tracks/search')
-  Future<AudiosPaginationModel> getTracks({@Query('query') String? query = 'hayedeh'});
+  Future<AudiosPaginationModel> getTracks({
+    @Query('query') String? query,
+    @Query('limit') int? limit,
+    @Query('offset') int? offset,
+  });
+  // @GET('/tracks/trending')
+  // Future<AudiosPaginationModel> getTrendingTracks({
+  //   @Query('limit') int? limit,
+  //   @Query('offset') int? offset,
+  // });
 }

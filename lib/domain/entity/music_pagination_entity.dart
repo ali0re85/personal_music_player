@@ -4,14 +4,16 @@ class MusicPaginationEntity {
   final List<MusicEntity> items;
   final int page;
   final int perPage;
-  final int count;
-  final int pageCount;
+  final int? count;
+
+  final bool hasMore;
 
   new({
     required this.items,
     required this.page,
     required this.perPage,
-    required this.count,
-    required this.pageCount,
+    this.count,
+
+    required this.hasMore,
   });
 }

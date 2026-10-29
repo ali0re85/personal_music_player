@@ -21,6 +21,6 @@ class TrackPaginationModel {
     page: page,
     perPage: perPage,
     count: count,
-    pageCount: pageCount,
+    hasMore: page < pageCount - 1,
   );
 }

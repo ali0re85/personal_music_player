@@ -35,7 +35,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
             totalCount: result.count,
             tracks,
             page: 0,
-            hasMore: result.page < result.pageCount - 1,
+            hasMore: result.hasMore,
           ),
         );
       }
@@ -61,7 +61,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         current.copyWith(
           tracks: [...current.tracks, ...result.items],
           page: nextPage,
-          hasMore: nextPage < result.pageCount - 1,
+          hasMore: result.hasMore,
           isLoadingMore: false,
         ),
       );

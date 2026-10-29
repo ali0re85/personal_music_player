@@ -23,9 +23,17 @@ class _MusicApi implements MusicApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<AudiosPaginationModel> getTracks({String? query = 'hayedeh'}) async {
+  Future<AudiosPaginationModel> getTracks({
+    String? query,
+    int? limit,
+    int? offset,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'query': query};
+    final queryParameters = <String, dynamic>{
+      r'query': query,
+      r'limit': limit,
+      r'offset': offset,
+    };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +15,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeScreenBloc(musicRepository: locator())..add(HomeScreenSongsRequested()),
+      create: (context) =>
+          HomeScreenBloc(musicRepository: locator())
+            ..add(HomeScreenSongsRequested()),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -207,7 +208,8 @@ class HomeScreen extends StatelessWidget {
                         builder: (context, state) {
                           final count = state is HomeScreenSuccess
                               ? state.totalCount
-                              : 0;
+                              : null;
+                          if (count == null) return const SizedBox.shrink();
 
                           return Text(
                             count.toString(),

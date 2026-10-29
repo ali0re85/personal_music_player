@@ -12,25 +12,36 @@ class MusicRepositoryOnline implements MusicRepository {
   MusicRepositoryOnline() {
     final dio = Dio();
     if (kDebugMode) {
-      dio.interceptors.add(PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseBody: true,
-        error: true,
-        compact: false,
-      ));
+      dio.interceptors.add(
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+          responseBody: true,
+          error: true,
+          compact: false,
+        ),
+      );
     }
     musicApi = MusicApi(dio, errorLogger: AppParseErrorLogger());
   }
 
   @override
-  Future<MusicPaginationEntity> getMusic({required int page, required int perPage}) async {
+  Future<MusicPaginationEntity> getMusic({
+    required int page,
+    required int perPage,
+  }) async {
     try {
-      final model = await musicApi.getTracks();
-      return model.toEntity();
+      final model = await musicApi.getTracks(
+        limit: perPage,
+        offset: page * perPage,
+      );
+      return model.toEntity(page: page, perPage: perPage);
     } on DioException catch (e, st) {
-      appLogger.e('Network error: ${e.type} | status: ${e.response?.statusCode}',
-          error: e.response?.data ?? e.message, stackTrace: st);
+      appLogger.e(
+        'Network error: ${e.type} | status: ${e.response?.statusCode}',
+        error: e.response?.data ?? e.message,
+        stackTrace: st,
+      );
       rethrow;
     } catch (e, st) {
       appLogger.e('Unknown error in getMusic', error: e, stackTrace: st);

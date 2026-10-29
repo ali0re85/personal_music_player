@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:music_player/data/models/audios_models/audios_track_model.dart';
 import 'package:music_player/domain/entity/music_pagination_entity.dart';
@@ -17,11 +18,10 @@ class AudiosPaginationModel {
 
   static const jsonSchema = _$AudiosPaginationModelJsonSchema;
 
-  MusicPaginationEntity toEntity() => MusicPaginationEntity(
+  MusicPaginationEntity toEntity({required int page, required int perPage}) => MusicPaginationEntity(
     items: data.where((e) => e.stream != null).map((e) => e.toEntity()).toList(),
-    page: 1,
-    perPage: 100,
-    count: 100000,
-    pageCount: 1000,
+    page: page,
+    perPage: perPage,
+    hasMore: data.length >=perPage
   );
 }

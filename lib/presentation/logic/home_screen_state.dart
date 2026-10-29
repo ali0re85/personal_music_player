@@ -12,14 +12,14 @@ final class HomeScreenSuccess extends HomeScreenState {
   final int page;
   final bool hasMore;
   final bool isLoadingMore;
-  final int totalCount;
+  final int? totalCount;
 
   HomeScreenSuccess(
     this.tracks, {
     required this.page,
     required this.hasMore,
     this.isLoadingMore = false,
-    required this.totalCount,
+   this.totalCount,
   });
 
   HomeScreenSuccess copyWith({
