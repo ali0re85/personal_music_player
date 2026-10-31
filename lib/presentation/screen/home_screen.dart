@@ -3,15 +3,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/controller/player_controller.dart';
 import 'package:music_player/locator.dart';
+import 'package:music_player/presentation/widget/home_header.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/presentation/widget/mini_player.dart';
 import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/presentation/logic/home_screen_bloc.dart';
 import 'package:music_player/presentation/widget/music_screen_route.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -30,62 +36,73 @@ class HomeScreen extends StatelessWidget {
             bottom: false,
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                  child: Row(
-                    children: [
-                      Assets.icons.logo.svg(),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Music Player',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const Spacer(),
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withValues(alpha: 0.5),
-                              blurRadius: 3,
-                              spreadRadius: 1,
-                              offset: const Offset(1, 1.5),
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Center(
-                          child: Assets.icons.search.svg(width: 24, height: 24),
-                        ),
-                      ),
-                      const SizedBox(width: 24),
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withValues(alpha: 0.5),
-                              blurRadius: 3,
-                              spreadRadius: 1,
-                              offset: const Offset(1, 1.5),
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Center(
-                          child: Assets.icons.categories.svg(
-                            width: 24,
-                            height: 24,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                //   child: Row(
+                //     children: [
+                //       Assets.icons.logo.svg(),
+                //       const SizedBox(width: 8),
+                //       Text(
+                //         'Music Player',
+                //         style: Theme.of(context).textTheme.titleMedium,
+                //       ),
+                //       const Spacer(),
+                //       GestureDetector(
+                //         onTap: () => setState(() => _isSearching = true),
+                //         child: Container(
+                //           width: 44,
+                //           height: 44,
+                //           decoration: BoxDecoration(
+                //             color: Colors.white,
+                //             boxShadow: [
+                //               BoxShadow(
+                //                 color: Colors.grey.withValues(alpha: 0.5),
+                //                 blurRadius: 3,
+                //                 spreadRadius: 1,
+                //                 offset: const Offset(1, 1.5),
+                //               ),
+                //             ],
+                //             borderRadius: BorderRadius.circular(50),
+                //           ),
+                //           child: Center(
+                //             child: Assets.icons.search.svg(
+                //               width: 24,
+                //               height: 24,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //       const SizedBox(width: 24),
+                //       Container(
+                //         width: 44,
+                //         height: 44,
+                //         decoration: BoxDecoration(
+                //           color: Colors.white,
+                //           boxShadow: [
+                //             BoxShadow(
+                //               color: Colors.grey.withValues(alpha: 0.5),
+                //               blurRadius: 3,
+                //               spreadRadius: 1,
+                //               offset: const Offset(1, 1.5),
+                //             ),
+                //           ],
+                //           borderRadius: BorderRadius.circular(50),
+                //         ),
+                //         child: Center(
+                //           child: Assets.icons.categories.svg(
+                //             width: 24,
+                //             height: 24,
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // if (_isSearching)
+                //   SearchField(
+                //     onClose: () => setState(() => _isSearching = false),
+                //   ),
+                const HomeHeader(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                   child: Row(

@@ -29,11 +29,13 @@ class MusicRepositoryOnline implements MusicRepository {
   Future<MusicPaginationEntity> getMusic({
     required int page,
     required int perPage,
+    String?query
   }) async {
     try {
       final model = await musicApi.getTracks(
         limit: perPage,
         offset: page * perPage,
+        query: query
       );
       return model.toEntity(page: page, perPage: perPage);
     } on DioException catch (e, st) {

@@ -19,7 +19,8 @@ class PlayerPanel extends StatelessWidget {
       borderRadius: BorderRadius.circular(32),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: Container(
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 500),
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.08),

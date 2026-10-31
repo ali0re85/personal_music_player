@@ -8,6 +8,7 @@ class MediaService {
   Future<TrackPaginationModel> getSongs({
     required int page,
     required int perPage,
+    String? query,
   }) async {
     final granted = await _mediaManager.requestStoragePermission();
 
@@ -27,6 +28,14 @@ class MediaService {
         perPage: perPage,
         count: totalCount,
         pageCount: pageCount,
+      );
+    }
+    if (query != null && query.trim().isNotEmpty) {
+      return _search(
+        query: query,
+        page: page,
+        perPage: perPage,
+        totalCount: totalCount,
       );
     }
 
@@ -64,6 +73,50 @@ class MediaService {
       page: page,
       perPage: perPage,
       count: totalCount,
+      pageCount: pageCount,
+    );
+  }
+
+  Future<TrackPaginationModel> _search({
+    required String query,
+    required int page,
+    required int perPage,
+    required int totalCount,
+  }) async {
+    final allPages = (totalCount / perPage).ceil();
+    final q = query.trim().toLowerCase();
+    final matches = <Track>[];
+
+    for (var p = 0; p < allPages; p++) {
+      final items = await _mediaManager.getMediaPage(
+        type: MediaType.audio,
+        page: p,
+        pageSize: perPage,
+      );
+
+      for (final item in items) {
+        if (item.name.toLowerCase().contains(q)) {
+          matches.add(
+            Track(
+              id: item.id,
+              title: item.name,
+              uri: item.uri,
+              path: item.path,
+              duration: item.duration,
+            ),
+          );
+        }
+      }
+    }
+
+    final pageCount = (matches.length / perPage).ceil();
+    final pageItems = matches.skip(page * perPage).take(perPage).toList();
+
+    return TrackPaginationModel(
+      items: pageItems,
+      page: page,
+      perPage: perPage,
+      count: matches.length,
       pageCount: pageCount,
     );
   }

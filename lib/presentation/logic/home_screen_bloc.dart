@@ -2,13 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/domain/repository/music_repository.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'home_screen_event.dart';
 part 'home_screen_state.dart';
 
 class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
-
   final MusicRepository musicRepository;
+  String? _query;
 
   HomeScreenBloc({required this.musicRepository}) : super(HomeScreenInitial()) {
     on<HomeScreenSongsRequested>((event, emit) async {
@@ -18,13 +19,26 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     on<HomeScreenNextPageRequested>((event, emit) async {
       await _loadNextPage(emit);
     });
+    on<HomeScreenSearchChanged>(
+      (event, emit) async {
+        final text = event.query.trim();
+        _query = text.isEmpty ? null : text;
+        await _load(emit);
+      },
+      transformer: (events, mapper) =>
+          events.debounce(const Duration(milliseconds: 400)).switchMap(mapper),
+    );
   }
 
   Future<void> _load(Emitter<HomeScreenState> emit) async {
     emit(HomeScreenLoading());
 
     try {
-      final result = await musicRepository.getMusic(page: 0, perPage: 100);
+      final result = await musicRepository.getMusic(
+        page: 0,
+        perPage: 100,
+        query: _query,
+      );
       final tracks = result.items;
 
       if (tracks.isEmpty) {
@@ -55,7 +69,11 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
     try {
       final nextPage = current.page + 1;
-      final result = await musicRepository.getMusic(page: nextPage, perPage: 100);
+      final result = await musicRepository.getMusic(
+        page: nextPage,
+        perPage: 100,
+        query: _query,
+      );
 
       emit(
         current.copyWith(

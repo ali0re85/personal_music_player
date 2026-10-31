@@ -7,8 +7,13 @@ class MusicRepositoryOffline implements MusicRepository {
   MediaService mediaService = MediaService();
 
   @override
-  Future<MusicPaginationEntity> getMusic({required int page, required int perPage}) async {
-    final TrackPaginationModel trackPaginationModel = await mediaService.getSongs(page: page, perPage: perPage);
+  Future<MusicPaginationEntity> getMusic({
+    required int page,
+    required int perPage,
+    String? query,
+  }) async {
+    final TrackPaginationModel trackPaginationModel = await mediaService
+        .getSongs(page: page, perPage: perPage, query: query);
     return trackPaginationModel.toEntity();
   }
 }
