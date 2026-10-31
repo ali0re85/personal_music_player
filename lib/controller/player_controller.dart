@@ -32,6 +32,9 @@ class PlayerController {
   int _currentIndex = -1;
   int get currentIndex => _currentIndex;
 
+  
+  bool lastMoveWasNext = true;
+
   /// مینی‌پلیر و صفحه‌ی پلیر به این گوش میدن. null یعنی هنوز آهنگی انتخاب نشده.
   final ValueNotifier<MusicEntity?> currentTrackNotifier = ValueNotifier(null);
   MusicEntity? get currentTrack => currentTrackNotifier.value;
@@ -77,7 +80,7 @@ class PlayerController {
       _audioService.seek(Duration.zero);
       return;
     }
-
+    lastMoveWasNext = true;
     await _playIndex((_currentIndex + 1) % _tracks.length);
   }
 
@@ -90,7 +93,7 @@ class PlayerController {
       _audioService.seek(Duration.zero);
       return;
     }
-
+    lastMoveWasNext = false;
     await _playIndex((_currentIndex - 1 + _tracks.length) % _tracks.length);
   }
 }
