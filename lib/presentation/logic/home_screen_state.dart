@@ -1,11 +1,18 @@
 part of 'home_screen_bloc.dart';
 
 @immutable
-sealed class HomeScreenState {}
+sealed class HomeScreenState {
+  final MusicSource source;
+ const HomeScreenState({required this.source});
+}
 
-final class HomeScreenInitial extends HomeScreenState {}
+final class HomeScreenInitial extends HomeScreenState {
+  const HomeScreenInitial({required super.source});
+}
 
-final class HomeScreenLoading extends HomeScreenState {}
+final class HomeScreenLoading extends HomeScreenState {
+  const HomeScreenLoading({required super.source});
+}
 
 final class HomeScreenSuccess extends HomeScreenState {
   final List<MusicEntity> tracks;
@@ -14,12 +21,13 @@ final class HomeScreenSuccess extends HomeScreenState {
   final bool isLoadingMore;
   final int? totalCount;
 
-  HomeScreenSuccess(
+  const HomeScreenSuccess(
     this.tracks, {
     required this.page,
     required this.hasMore,
     this.isLoadingMore = false,
    this.totalCount,
+   required super.source
   });
 
   HomeScreenSuccess copyWith({
@@ -35,14 +43,17 @@ final class HomeScreenSuccess extends HomeScreenState {
       hasMore: hasMore ?? this.hasMore,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       totalCount: totalCount ?? this.totalCount,
+      source: source
     );
   }
 }
 
-final class HomeScreenEmpty extends HomeScreenState {}
+final class HomeScreenEmpty extends HomeScreenState {
+  const HomeScreenEmpty({required super.source});
+}
 
 final class HomeScreenError extends HomeScreenState {
   final String errorMessage;
 
-  HomeScreenError(this.errorMessage);
+  const HomeScreenError( this.errorMessage,{required super.source});
 }

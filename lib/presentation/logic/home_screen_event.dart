@@ -11,3 +11,8 @@ class HomeScreenSearchChanged extends HomeScreenEvent {
   final String query;
   HomeScreenSearchChanged(this.query);
 }
+
+class HomeScreenSourceChanged extends HomeScreenEvent {
+  final MusicSource source;
+  HomeScreenSourceChanged(this.source);
+}

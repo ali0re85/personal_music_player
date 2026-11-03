@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/controller/player_controller.dart';
+import 'package:music_player/domain/repository/music_repository.dart';
 import 'package:music_player/locator.dart';
 import 'package:music_player/presentation/widget/home_header.dart';
+import 'package:music_player/presentation/widget/source_toggle.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/presentation/widget/mini_player.dart';
 import 'package:music_player/gen/assets.gen.dart';
@@ -21,9 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          HomeScreenBloc(musicRepository: locator())
-            ..add(HomeScreenSongsRequested()),
+      create: (context) => HomeScreenBloc(
+        offlineRepository: locator<MusicRepository>(instanceName: 'offline'),
+        onlineRepository: locator<MusicRepository>(instanceName: 'online'),
+      )..add(HomeScreenSongsRequested()),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -36,72 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: false,
             child: Column(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                //   child: Row(
-                //     children: [
-                //       Assets.icons.logo.svg(),
-                //       const SizedBox(width: 8),
-                //       Text(
-                //         'Music Player',
-                //         style: Theme.of(context).textTheme.titleMedium,
-                //       ),
-                //       const Spacer(),
-                //       GestureDetector(
-                //         onTap: () => setState(() => _isSearching = true),
-                //         child: Container(
-                //           width: 44,
-                //           height: 44,
-                //           decoration: BoxDecoration(
-                //             color: Colors.white,
-                //             boxShadow: [
-                //               BoxShadow(
-                //                 color: Colors.grey.withValues(alpha: 0.5),
-                //                 blurRadius: 3,
-                //                 spreadRadius: 1,
-                //                 offset: const Offset(1, 1.5),
-                //               ),
-                //             ],
-                //             borderRadius: BorderRadius.circular(50),
-                //           ),
-                //           child: Center(
-                //             child: Assets.icons.search.svg(
-                //               width: 24,
-                //               height: 24,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //       const SizedBox(width: 24),
-                //       Container(
-                //         width: 44,
-                //         height: 44,
-                //         decoration: BoxDecoration(
-                //           color: Colors.white,
-                //           boxShadow: [
-                //             BoxShadow(
-                //               color: Colors.grey.withValues(alpha: 0.5),
-                //               blurRadius: 3,
-                //               spreadRadius: 1,
-                //               offset: const Offset(1, 1.5),
-                //             ),
-                //           ],
-                //           borderRadius: BorderRadius.circular(50),
-                //         ),
-                //         child: Center(
-                //           child: Assets.icons.categories.svg(
-                //             width: 24,
-                //             height: 24,
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // if (_isSearching)
-                //   SearchField(
-                //     onClose: () => setState(() => _isSearching = false),
-                //   ),
                 const HomeHeader(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
@@ -214,28 +151,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  child: Row(
+                  child: Stack(
+                    alignment: Alignment.center,
                     children: [
-                      Text(
-                        'Songs',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const Spacer(),
-                      BlocBuilder<HomeScreenBloc, HomeScreenState>(
-                        builder: (context, state) {
-                          final count = state is HomeScreenSuccess
-                              ? state.totalCount
-                              : null;
-                          if (count == null) return const SizedBox.shrink();
-
-                          return Text(
-                            count.toString(),
+                      Row(
+                        children: [
+                          Text(
+                            'Songs',
                             style: Theme.of(context).textTheme.titleMedium,
-                          );
-                        },
+                          ),
+                          const Spacer(),
+                          // همون BlocBuilder تعداد آهنگ‌ها که الان داری
+                          const SizedBox(width: 8),
+                          Assets.icons.vector.svg(width: 24, height: 24),
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      Assets.icons.vector.svg(width: 24, height: 24),
+                      BlocBuilder<HomeScreenBloc, HomeScreenState>(
+                        buildWhen: (prev, curr) => prev.source != curr.source,
+                        builder: (context, state) => SourceToggle(
+                          selected: state.source,
+                          onChanged: (s) => context.read<HomeScreenBloc>().add(
+                            HomeScreenSourceChanged(s),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

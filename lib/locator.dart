@@ -6,6 +6,12 @@ import 'package:music_player/domain/repository/music_repository.dart';
 final locator = GetIt.instance;
 
 void setupDependencyInjection() {
-  // locator.registerSingleton<MusicRepository>(MusicRepositoryOnline());
-  locator.registerSingleton<MusicRepository>(MusicRepositoryOffline());
+  locator.registerLazySingleton<MusicRepository>(
+    () => MusicRepositoryOnline(),
+    instanceName: 'online',
+  );
+  locator.registerLazySingleton<MusicRepository>(
+    () => MusicRepositoryOffline(),
+    instanceName: 'offline',
+  );
 }

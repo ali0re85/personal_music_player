@@ -2,16 +2,22 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/domain/repository/music_repository.dart';
+import 'package:music_player/presentation/logic/music_source.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'home_screen_event.dart';
 part 'home_screen_state.dart';
 
 class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
-  final MusicRepository musicRepository;
+  final MusicRepository offlineRepository;
+  final MusicRepository onlineRepository;
   String? _query;
+  MusicSource _source = MusicSource.local;
 
-  HomeScreenBloc({required this.musicRepository}) : super(HomeScreenInitial()) {
+  HomeScreenBloc({
+    required this.offlineRepository,
+    required this.onlineRepository,
+  }) : super(HomeScreenInitial(source: MusicSource.local)) {
     on<HomeScreenSongsRequested>((event, emit) async {
       await _load(emit);
     });
@@ -28,13 +34,18 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       transformer: (events, mapper) =>
           events.debounce(const Duration(milliseconds: 400)).switchMap(mapper),
     );
+    on<HomeScreenSourceChanged>((event, emit) async {
+      if (event.source == _source) return;
+      _source = event.source;
+      await _load(emit);
+    }, transformer: (events, mapper) => events.switchMap(mapper));
   }
 
   Future<void> _load(Emitter<HomeScreenState> emit) async {
-    emit(HomeScreenLoading());
+    emit(HomeScreenLoading(source: _source));
 
     try {
-      final result = await musicRepository.getMusic(
+      final result = await _repository.getMusic(
         page: 0,
         perPage: 100,
         query: _query,
@@ -42,7 +53,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       final tracks = result.items;
 
       if (tracks.isEmpty) {
-        emit(HomeScreenEmpty());
+        emit(HomeScreenEmpty(source: _source));
       } else {
         emit(
           HomeScreenSuccess(
@@ -50,11 +61,12 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
             tracks,
             page: 0,
             hasMore: result.hasMore,
+            source: _source,
           ),
         );
       }
     } catch (error) {
-      emit(HomeScreenError(error.toString()));
+      emit(HomeScreenError(error.toString(), source: _source));
     }
   }
 
@@ -69,7 +81,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
     try {
       final nextPage = current.page + 1;
-      final result = await musicRepository.getMusic(
+      final result = await _repository.getMusic(
         page: nextPage,
         perPage: 100,
         query: _query,
@@ -87,4 +99,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       emit(current.copyWith(isLoadingMore: false));
     }
   }
+
+  MusicRepository get _repository =>
+      _source == MusicSource.local ? offlineRepository : onlineRepository;
 }
