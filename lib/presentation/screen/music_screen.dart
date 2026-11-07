@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
-import 'package:liquid_glass_widgets/widgets/surfaces/glass_scaffold.dart';
-import 'package:liquid_glass_widgets/widgets/shared/glass_page.dart';
 import 'package:music_player/controller/player_controller.dart';
 import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
@@ -56,7 +54,7 @@ class MainScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
             child: Column(
               children: [
-                const PlayerHeader(),
+                 PlayerHeader(track: track,),
                 Expanded(child: PlayerCover(track: track)),
                 PlayerPanel(track: track, hasError: hasError),
               ],

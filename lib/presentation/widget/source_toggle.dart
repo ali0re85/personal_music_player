@@ -19,7 +19,7 @@ class SourceToggle extends StatelessWidget {
       height: 40,
       child: GlassSegmentedControl(
         height: 40,
-        quality: GlassQuality.premium, 
+        quality: GlassQuality.premium,
         segments: const [
           GlassSegment(label: 'Local'),
           GlassSegment(label: 'Online'),

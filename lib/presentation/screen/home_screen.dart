@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
-import 'package:liquid_glass_widgets/widgets/containers/glass_container.dart';
-import 'package:liquid_glass_widgets/widgets/interactive/glass_button.dart';
-import 'package:liquid_glass_widgets/widgets/shared/glass_page.dart';
-import 'package:liquid_glass_widgets/widgets/surfaces/glass_scaffold.dart';
 import 'package:music_player/controller/player_controller.dart';
-import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/core/theme/tinted_svg.dart';
 import 'package:music_player/domain/repository/music_repository.dart';
 import 'package:music_player/gen/assets.gen.dart';
@@ -17,7 +12,6 @@ import 'package:music_player/presentation/widget/home_header.dart';
 import 'package:music_player/presentation/widget/mini_player.dart';
 import 'package:music_player/presentation/widget/music_screen_route.dart';
 import 'package:music_player/presentation/widget/source_toggle.dart';
-import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/presentation/widget/track_title.dart';
 
 class HomeScreen extends StatefulWidget {

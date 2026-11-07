@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
-import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/presentation/logic/music_screen_bloc.dart';
 import 'package:music_player/presentation/widget/accent_builder.dart';
 import 'package:music_player/services/audio_service.dart';
@@ -57,8 +56,6 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
-
     return StreamBuilder<PlayerState>(
       stream: _audioService.playerStateStream,
       builder: (context, snapshot) {

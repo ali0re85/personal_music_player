@@ -164,7 +164,7 @@ class _PlayerCoverState extends State<PlayerCover>
                             clipBehavior: Clip.none,
                             children: [
                               ...previousChildren,
-                              if (currentChild != null) currentChild,
+                              ?currentChild,
                             ],
                           );
                         },

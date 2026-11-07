@@ -28,17 +28,25 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     on<HomeScreenSearchChanged>(
       (event, emit) async {
         final text = event.query.trim();
-        _query = text.isEmpty ? null : text;
+        final newQuery = text.isEmpty ? null : text;
+
+        if (newQuery == _query) return; 
+
+        _query = newQuery;
         await _load(emit);
       },
       transformer: (events, mapper) =>
           events.debounce(const Duration(milliseconds: 400)).switchMap(mapper),
     );
-    on<HomeScreenSourceChanged>((event, emit) async {
-      if (event.source == _source) return;
-      _source = event.source;
-      await _load(emit);
-    }, transformer: (events, mapper) => events.switchMap(mapper));
+    on<HomeScreenSourceChanged>(
+      (event, emit) async {
+        if (event.source == _source) return;
+        _source = event.source;
+        await _load(emit);
+      },
+      transformer: (events, mapper) =>
+          events.distinct((a, b) => a.source == b.source).switchMap(mapper),
+    );
   }
 
   Future<void> _load(Emitter<HomeScreenState> emit) async {

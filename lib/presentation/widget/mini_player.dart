@@ -43,7 +43,6 @@ class _MiniPlayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = PlayerController.instance;
-    final colors = context.appColors;
     final text = Theme.of(context).textTheme;
 
     return GestureDetector(

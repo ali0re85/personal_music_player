@@ -1,17 +1,19 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_widgets/widgets/interactive/glass_button.dart';
 import 'package:music_player/core/theme/app_theme.dart';
-import 'package:music_player/gen/assets.gen.dart';
+import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/presentation/logic/music_screen_bloc.dart';
 import 'package:music_player/presentation/widget/accent_builder.dart';
+import 'package:music_player/presentation/widget/equalizer_bars.dart';
+import 'package:music_player/presentation/widget/flowing_wave.dart';
+import 'package:music_player/presentation/widget/spinning_cover.dart';
 
 class PlayerHeader extends StatelessWidget {
-  const PlayerHeader({super.key});
+  final MusicEntity track;
+  const PlayerHeader({super.key, required this.track});
 
   void _toggleLike(BuildContext context) {
     HapticFeedback.mediumImpact();
@@ -36,13 +38,7 @@ class PlayerHeader extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: LinearGradient(colors: [accent, partner]),
               ),
-              child: ClipOval(
-                child: Assets.icons.profileImage.image(
-                  width: 52,
-                  height: 52,
-                  fit: BoxFit.cover,
-                ),
-              ),
+              child: SpinningCover(track: track, size: 52),
             );
           },
         ),
@@ -51,11 +47,14 @@ class PlayerHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Anjelina Joeli',
-                style: text.titleSmall?.copyWith(fontSize: 16),
+              AccentBuilder(
+                builder: (context, accent) => FlowingWave(color: accent),
               ),
-              Text('@anjelina_joeli', style: text.bodySmall),
+              const SizedBox(height: 6),
+              Text(
+                track.url != null ? 'Online' : 'On this device',
+                style: text.bodySmall,
+              ),
             ],
           ),
         ),
