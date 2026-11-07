@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 
 class PlayerTrackInfo extends StatelessWidget {
@@ -13,6 +14,9 @@ class PlayerTrackInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final colors = context.appColors;
+
     return SizedBox(
       width: double.infinity,
       child: AnimatedSwitcher(
@@ -25,21 +29,14 @@ class PlayerTrackInfo extends StatelessWidget {
               track.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                height: 1.2,
-              ),
+              style: text.titleLarge,
             ),
-
             const SizedBox(height: 4),
-
             Text(
-              hasError ? 'Could not load this track.' : (track.artist??""),
-              style: TextStyle(
-                color: hasError ? Colors.redAccent : Colors.white70,
+              hasError ? 'Could not load this track.' : (track.artist ?? ''),
+              style: text.bodySmall?.copyWith(
                 fontSize: 13,
+                color: hasError ? colors.error : null,
               ),
             ),
           ],

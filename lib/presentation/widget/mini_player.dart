@@ -1,6 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:music_player/controller/player_controller.dart';
+import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
+import 'package:music_player/presentation/widget/accent_builder.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/presentation/widget/music_screen_route.dart';
 import 'package:music_player/services/audio_service.dart';
@@ -38,7 +43,8 @@ class _MiniPlayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = PlayerController.instance;
-    final cs = Theme.of(context).colorScheme;
+    final colors = context.appColors;
+    final text = Theme.of(context).textTheme;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -46,29 +52,21 @@ class _MiniPlayerCard extends StatelessWidget {
       onVerticalDragEnd: (details) {
         if ((details.primaryVelocity ?? 0) < -300) _open(context);
       },
-      child: Container(
+      child: GlassContainer(
         margin: const EdgeInsets.fromLTRB(12, 0, 12, 8),
         padding: const EdgeInsets.fromLTRB(14, 8, 14, 12),
-        decoration: BoxDecoration(
-          color: cs.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(28),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+        shape: LiquidRoundedSuperellipse(borderRadius: 28),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 36,
-              height: 4,
-              decoration: BoxDecoration(
-                color: cs.outlineVariant,
-                borderRadius: BorderRadius.circular(2),
+            AccentBuilder(
+              builder: (context, accent) => Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: accent,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -84,20 +82,14 @@ class _MiniPlayerCard extends StatelessWidget {
                         track.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: text.titleSmall,
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        track.artist??"",
+                        track.artist ?? "",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: cs.onSurfaceVariant,
-                        ),
+                        style: text.bodySmall?.copyWith(fontSize: 13),
                       ),
                     ],
                   ),
@@ -130,6 +122,7 @@ class _CoverPlayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audio = AudioService.instance;
+    final colors = context.appColors;
 
     return StreamBuilder<bool>(
       stream: audio.playingStream,
@@ -152,13 +145,16 @@ class _CoverPlayButton extends StatelessWidget {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.black.withValues(alpha: 0.35),
+                      color: colors.scrimAt(0.35),
                     ),
                   ),
                 ),
+                const Positioned.fill(
+                  child: RepaintBoundary(child: _ProgressRing()),
+                ),
                 Icon(
                   playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                  color: Colors.white,
+                  color: AppColors.dark.onMedia,
                   size: 30,
                 ),
               ],
@@ -178,20 +174,98 @@ class _RoundButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      elevation: 2,
-      shadowColor: Colors.black38,
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: SizedBox(
-          width: 44,
-          height: 44,
-          child: Icon(icon, size: 24, color: Colors.black87),
-        ),
+    return IconButton(
+      onPressed: onTap,
+      icon: Icon(icon, size: 30, color: context.appColors.onMedia),
+    );
+  }
+}
+
+/// حلقه دور کاور که همراه آهنگ پر میشه (مثل سیک‌بار، ولی فقط نمایشی).
+class _ProgressRing extends StatelessWidget {
+  const _ProgressRing();
+
+  @override
+  Widget build(BuildContext context) {
+    final audio = AudioService.instance;
+    final trackColor = context.appColors.track;
+
+    return AccentBuilder(
+      builder: (context, accent) => StreamBuilder<Duration?>(
+        stream: audio.durationStream,
+        initialData: audio.player.duration,
+        builder: (context, durationSnap) {
+          final totalMs = durationSnap.data?.inMilliseconds ?? 0;
+
+          return StreamBuilder<Duration>(
+            stream: audio.positionStream,
+            initialData: audio.player.position,
+            builder: (context, positionSnap) {
+              final posMs = positionSnap.data?.inMilliseconds ?? 0;
+              final progress = totalMs > 0
+                  ? (posMs / totalMs).clamp(0.0, 1.0)
+                  : 0.0;
+
+              return CustomPaint(
+                painter: _RingPainter(
+                  progress: progress,
+                  color: accent,
+                  trackColor: trackColor,
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
+}
+
+class _RingPainter extends CustomPainter {
+  _RingPainter({
+    required this.progress,
+    required this.color,
+    required this.trackColor,
+  });
+
+  final double progress;
+  final Color color;
+  final Color trackColor;
+
+  static const _stroke = 2.5;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = (Offset.zero & size).deflate(_stroke / 2);
+
+    // حلقه کم‌رنگ پس‌زمینه (کل مسیر)
+    canvas.drawOval(
+      rect,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = _stroke
+        ..color = trackColor,
+    );
+
+    if (progress <= 0) return;
+
+    // بخش پخش‌شده، از ساعت ۱۲ ساعت‌گرد
+    canvas.drawArc(
+      rect,
+      -pi / 2,
+      2 * pi * progress,
+      false,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = _stroke
+        ..strokeCap = StrokeCap.round
+        ..color = color,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_RingPainter old) =>
+      old.progress != progress ||
+      old.color != color ||
+      old.trackColor != trackColor;
 }

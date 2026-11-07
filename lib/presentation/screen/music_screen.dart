@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+import 'package:liquid_glass_widgets/widgets/surfaces/glass_scaffold.dart';
+import 'package:liquid_glass_widgets/widgets/shared/glass_page.dart';
 import 'package:music_player/controller/player_controller.dart';
+import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/presentation/widget/player_background.dart';
 import 'package:music_player/presentation/widget/player_cover.dart';
@@ -22,7 +26,7 @@ class MainScreen extends StatelessWidget {
         final track = controller.currentTrack;
 
         if (track == null) {
-          return const Scaffold(backgroundColor: Colors.black);
+          return Scaffold(backgroundColor: context.appColors.scrim);
         }
 
         return _buildScaffold(track, controller.hasError.value);
@@ -31,41 +35,35 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget _buildScaffold(MusicEntity track, bool hasError) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          PlayerBackground(track: track),
-
-          SafeArea(
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0, end: 1),
-              duration: const Duration(milliseconds: 800),
-              curve: Curves.easeOutCubic,
-              builder: (context, t, child) {
-                return Opacity(
-                  opacity: t,
-                  child: Transform.translate(
-                    offset: Offset(0, 32 * (1 - t)),
-                    child: child,
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
-                child: Column(
-                  children: [
-                    const PlayerHeader(),
-                    Expanded(child: PlayerCover(track: track)),
-                    PlayerPanel(track: track, hasError: hasError),
-                  ],
-                ),
+    return GlassScaffold(
+      background: PlayerBackground(track: track),
+      statusBarStyle: GlassStatusBarStyle.light,
+      body: SafeArea(
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: 1),
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeOutCubic,
+          builder: (context, t, child) {
+            return Opacity(
+              opacity: t,
+              child: Transform.translate(
+                offset: Offset(0, 32 * (1 - t)),
+                child: child,
               ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
+            child: Column(
+              children: [
+                const PlayerHeader(),
+                Expanded(child: PlayerCover(track: track)),
+                PlayerPanel(track: track, hasError: hasError),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 }
-

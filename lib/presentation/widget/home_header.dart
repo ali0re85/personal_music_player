@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+import 'package:music_player/core/theme/tinted_svg.dart';
 import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/presentation/logic/home_screen_bloc.dart';
 
@@ -13,26 +15,12 @@ class HomeHeader extends StatefulWidget {
 class _HomeHeaderState extends State<HomeHeader> {
   bool _isSearching = false;
   void _closeSearch() {
-    // show the normal list again, then shrink the pill
     context.read<HomeScreenBloc>().add(HomeScreenSearchChanged(''));
     setState(() => _isSearching = false);
   }
 
   static const double _size = 44;
   static const double _gap = 24;
-
-  BoxDecoration get _pillDecoration => BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(50),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withValues(alpha: 0.5),
-        blurRadius: 3,
-        spreadRadius: 1,
-        offset: const Offset(1, 1.5),
-      ),
-    ],
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +44,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Assets.icons.logo.svg(),
+                        Assets.icons.logo.tinted(context),
                         const SizedBox(width: 8),
                         Text(
                           'Music Player',
@@ -70,13 +58,16 @@ class _HomeHeaderState extends State<HomeHeader> {
                 // categories icon, always on the right
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Container(
+                  child: GlassButton(
                     width: _size,
                     height: _size,
-                    decoration: _pillDecoration,
-                    child: Center(
-                      child: Assets.icons.categories.svg(width: 24, height: 24),
+                    iconSize: 24,
+                    icon: Assets.icons.categories.tinted(
+                      context,
+                      width: 24,
+                      height: 24,
                     ),
+                    onTap: () {},
                   ),
                 ),
 
@@ -94,42 +85,48 @@ class _HomeHeaderState extends State<HomeHeader> {
                       curve: Curves.easeInOut,
                       width: _isSearching ? expandedWidth : _size,
                       height: _size,
-                      decoration: _pillDecoration,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: OverflowBox(
-                          alignment: Alignment.centerLeft,
-                          minWidth: 0,
-                          maxWidth: expandedWidth,
-                          child: SizedBox(
-                            width: expandedWidth,
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 10),
-                                Assets.icons.search.svg(width: 24, height: 24),
-                                if (_isSearching) ...[
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: TextField(
-                                      autofocus: true,
-                                      onChanged: (text) {
-                                        context.read<HomeScreenBloc>().add(
-                                          HomeScreenSearchChanged(text),
-                                        );
-                                      },
-                                      decoration: const InputDecoration(
-                                        hintText: 'Search songs',
-                                        border: InputBorder.none,
-                                        isDense: true,
+                      child: GlassContainer(
+                        shape: LiquidRoundedSuperellipse(borderRadius: 22),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: OverflowBox(
+                            alignment: Alignment.centerLeft,
+                            minWidth: 0,
+                            maxWidth: expandedWidth,
+                            child: SizedBox(
+                              width: expandedWidth,
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 10),
+                                  Assets.icons.search.tinted(
+                                    context,
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                  if (_isSearching) ...[
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: TextField(
+                                        autofocus: true,
+                                        onChanged: (text) {
+                                          context.read<HomeScreenBloc>().add(
+                                            HomeScreenSearchChanged(text),
+                                          );
+                                        },
+                                        decoration: const InputDecoration(
+                                          hintText: 'Search songs',
+                                          border: InputBorder.none,
+                                          isDense: true,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.close),
-                                    onPressed: _closeSearch,
-                                  ),
+                                    IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: _closeSearch,
+                                    ),
+                                  ],
                                 ],
-                              ],
+                              ),
                             ),
                           ),
                         ),

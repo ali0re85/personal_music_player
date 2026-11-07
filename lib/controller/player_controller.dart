@@ -1,15 +1,14 @@
 import 'dart:async';
+import 'dart:ui' show Color;
 
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/services/audio_service.dart';
+import 'package:music_player/services/palette_service.dart';
 
-/// تنها منبع حقیقت برای «لیست آهنگ‌ها» و «آهنگ فعلی».
-/// هم صفحه‌ی پلیر و هم مینی‌پلیر از همین استفاده می‌کنن.
 class PlayerController {
   PlayerController._() {
-    // وقتی آهنگ تموم شد برو آهنگ بعدی (حتی اگه صفحه‌ی پلیر بسته باشه)
     _audioService.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed) {
         if (_tracks.length > 1) {
@@ -32,17 +31,28 @@ class PlayerController {
   int _currentIndex = -1;
   int get currentIndex => _currentIndex;
 
-  
   bool lastMoveWasNext = true;
 
-  /// مینی‌پلیر و صفحه‌ی پلیر به این گوش میدن. null یعنی هنوز آهنگی انتخاب نشده.
   final ValueNotifier<MusicEntity?> currentTrackNotifier = ValueNotifier(null);
   MusicEntity? get currentTrack => currentTrackNotifier.value;
 
-  /// true یعنی لود آهنگ فعلی با خطا مواجه شد
+  final ValueNotifier<Color?> accentNotifier = ValueNotifier(null);
+  final ValueNotifier<bool> backdropIsLightNotifier = ValueNotifier(false);
+
+  Future<void> _updateLook(MusicEntity track) async {
+    final look = await PaletteService.instance.getLook(track);
+
+    if (currentTrack?.id != track.id) return;
+
+    debugPrint(
+      '🎨 "${track.title}": accent=${look?.accent} light=${look?.isLight}',
+    );
+    accentNotifier.value = look?.accent;
+    backdropIsLightNotifier.value = look?.isLight ?? false;
+  }
+
   final ValueNotifier<bool> hasError = ValueNotifier(false);
 
-  /// لیست آهنگ‌ها رو ست می‌کنه و آهنگ [index] رو پخش می‌کنه.
   Future<void> setQueue(
     List<MusicEntity> tracks,
     int index, {
@@ -60,6 +70,7 @@ class PlayerController {
 
     hasError.value = false;
     currentTrackNotifier.value = track;
+    unawaited(_updateLook(track));
 
     try {
       await _audioService.loadTrack(track, autoPlay: autoPlay);
@@ -87,7 +98,6 @@ class PlayerController {
   Future<void> previous() async {
     if (_tracks.isEmpty) return;
 
-    // اگه بیشتر از ۳ ثانیه از آهنگ گذشته یا فقط یه آهنگ داریم، از اول پخش کن
     if (_tracks.length == 1 ||
         _audioService.position > const Duration(seconds: 3)) {
       _audioService.seek(Duration.zero);

@@ -14,11 +14,12 @@ class MusicRepositoryOnline implements MusicRepository {
     if (kDebugMode) {
       dio.interceptors.add(
         PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseBody: true,
+          requestHeader: false,
+          requestBody: false,
+          responseBody: false, // مهم‌ترین
+          responseHeader: false,
           error: true,
-          compact: false,
+          compact: true,
         ),
       );
     }
@@ -29,13 +30,13 @@ class MusicRepositoryOnline implements MusicRepository {
   Future<MusicPaginationEntity> getMusic({
     required int page,
     required int perPage,
-    String?query
+    String? query,
   }) async {
     try {
       final model = await musicApi.getTracks(
         limit: perPage,
         offset: page * perPage,
-        query: query
+        query: query,
       );
       return model.toEntity(page: page, perPage: perPage);
     } on DioException catch (e, st) {

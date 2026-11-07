@@ -12,12 +12,14 @@ class TrackCover extends StatelessWidget {
     this.width,
     this.height,
     this.fit = BoxFit.cover,
+    this.cacheWidth = 800,
   });
 
   final MusicEntity track;
   final double? width;
   final double? height;
   final BoxFit fit;
+  final int cacheWidth;
 
   Widget _fallback() {
     return Assets.icons.cover.image(width: width, height: height, fit: fit);
@@ -29,7 +31,7 @@ class TrackCover extends StatelessWidget {
     if (coverUrl != null) {
       return Image.network(
         coverUrl,
-        cacheWidth: 800,
+        cacheWidth: cacheWidth,
         width: width,
         height: height,
         fit: fit,
@@ -50,7 +52,7 @@ class TrackCover extends StatelessWidget {
           width: width,
           height: height,
           fit: fit,
-          cacheWidth: 800,
+          cacheWidth: cacheWidth,
           gaplessPlayback: true,
           errorBuilder: (context, error, stackTrace) => _fallback(),
         );

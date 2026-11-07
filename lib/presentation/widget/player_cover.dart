@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/controller/player_controller.dart';
+import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/presentation/logic/music_screen_bloc.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
@@ -113,7 +114,7 @@ class _PlayerCoverState extends State<PlayerCover>
           borderRadius: BorderRadius.circular(32),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: playing ? 0.55 : 0.3),
+              color: context.appColors.scrimAt(playing ? 0.55 : 0.3),
               blurRadius: playing ? 50 : 20,
               offset: Offset(0, playing ? 24 : 10),
             ),

@@ -1,8 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/presentation/logic/music_screen_bloc.dart';
+import 'package:music_player/presentation/widget/accent_builder.dart';
 import 'package:music_player/services/audio_service.dart';
 
 class PlayerSeekBar extends StatelessWidget {
@@ -21,6 +21,8 @@ class PlayerSeekBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioService = AudioService.instance;
+    final colors = context.appColors;
+    final labelStyle = Theme.of(context).textTheme.labelSmall;
 
     return BlocBuilder<MusicScreenBloc, MusicScreenState>(
       builder: (context, blocState) {
@@ -35,7 +37,6 @@ class PlayerSeekBar extends StatelessWidget {
           initialData: audioService.player.duration,
           builder: (context, durationSnap) {
             final total = durationSnap.data ?? Duration.zero;
-
             final maxMs = total.inMilliseconds.toDouble();
 
             return StreamBuilder<Duration>(
@@ -55,33 +56,41 @@ class PlayerSeekBar extends StatelessWidget {
 
                 return Column(
                   children: [
-                    SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        trackHeight: 4,
-                        activeTrackColor: Colors.white,
-                        inactiveTrackColor: Colors.white24,
-                        thumbColor: Colors.white,
-                        overlayColor: Colors.white24,
-                        thumbShape: const RoundSliderThumbShape(
-                          enabledThumbRadius: 6,
-                          elevation: 0,
-                          pressedElevation: 0,
-                        ),
-                        overlayShape: const RoundSliderOverlayShape(
-                          overlayRadius: 16,
-                        ),
-                      ),
-                      child: Slider(
-                        min: 0,
-                        max: maxMs > 0 ? maxMs : 1,
-                        value: value,
-                        onChanged: maxMs > 0
-                            ? (v) => context.read<MusicScreenBloc>().add(
-                                SeekDragged(v),
-                              )
-                            : null,
-                        onChangeEnd: (v) =>
-                            context.read<MusicScreenBloc>().add(SeekEnded(v)),
+                    AccentBuilder(
+                      builder: (context, accent) => 
+                       TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: isDragging ? 1 : 0),
+                        duration: const Duration(milliseconds: 180),
+                        curve: Curves.easeOut,
+                        builder: (context, t, _) {
+                          return SliderTheme(
+                            data: SliderTheme.of(context).copyWith(
+                              trackHeight: 4 + 4 * t,
+                              activeTrackColor: accent,
+                              inactiveTrackColor: colors.track,
+                              thumbColor: accent,
+                              overlayShape: SliderComponentShape.noOverlay,
+                              thumbShape: RoundSliderThumbShape(
+                                enabledThumbRadius: 7 * t,
+                                elevation: 0,
+                                pressedElevation: 0,
+                              ),
+                            ),
+                            child: Slider(
+                              min: 0,
+                              max: maxMs > 0 ? maxMs : 1,
+                              value: value,
+                              onChanged: maxMs > 0
+                                  ? (v) => context.read<MusicScreenBloc>().add(
+                                      SeekDragged(v),
+                                    )
+                                  : null,
+                              onChangeEnd: (v) => context
+                                  .read<MusicScreenBloc>()
+                                  .add(SeekEnded(v)),
+                            ),
+                          );
+                        },
                       ),
                     ),
 
@@ -90,22 +99,8 @@ class PlayerSeekBar extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            _format(shown),
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12,
-                              fontFeatures: [FontFeature.tabularFigures()],
-                            ),
-                          ),
-                          Text(
-                            _format(total),
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12,
-                              fontFeatures: [FontFeature.tabularFigures()],
-                            ),
-                          ),
+                          Text(_format(shown), style: labelStyle),
+                          Text(_format(total), style: labelStyle),
                         ],
                       ),
                     ),
