@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
-import 'package:music_player/core/theme/tinted_svg.dart';
 import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/presentation/logic/home_screen_bloc.dart';
 
@@ -41,7 +40,14 @@ class _HomeHeaderState extends State<HomeHeader> {
                   child: AnimatedOpacity(
                     opacity: _isSearching ? 0 : 1,
                     duration: const Duration(milliseconds: 200),
-                    child: Assets.brand.logoFa.image(height: 36)
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Assets.brand.logoFa.image(height: 32),
+                        const SizedBox(width: 10),
+                        Assets.brand.logoEn.image(height: 24),
+                      ],
+                    ),
                   ),
                 ),
 
@@ -52,11 +58,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                     width: _size,
                     height: _size,
                     iconSize: 24,
-                    icon: Assets.icons.categories.tinted(
-                      context,
-                      width: 24,
-                      height: 24,
-                    ),
+                    icon: Assets.icons.categories2.svg(width: 24, height: 24),
                     onTap: () {},
                   ),
                 ),
@@ -88,8 +90,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                               child: Row(
                                 children: [
                                   const SizedBox(width: 10),
-                                  Assets.icons.search.tinted(
-                                    context,
+                                  Assets.icons.search2.svg(
                                     width: 24,
                                     height: 24,
                                   ),

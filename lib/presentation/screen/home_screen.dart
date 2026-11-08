@@ -7,6 +7,7 @@ import 'package:music_player/domain/repository/music_repository.dart';
 import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/locator.dart';
 import 'package:music_player/presentation/logic/home_screen_bloc.dart';
+import 'package:music_player/presentation/widget/gradient_text.dart';
 import 'package:music_player/presentation/widget/home_background.dart';
 import 'package:music_player/presentation/widget/home_header.dart';
 import 'package:music_player/presentation/widget/mini_player.dart';
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    GradientText(
                       'Play Lists',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
@@ -52,11 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 44,
                       height: 44,
                       iconSize: 24,
-                      icon: Assets.icons.add.tinted(
-                        context,
-                        width: 24,
-                        height: 24,
-                      ),
+                      icon: Assets.icons.add2.svg(width: 24, height: 24),
                       onTap: () {},
                     ),
                   ],
@@ -101,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            Text(
+                            GradientText(
                               'Play List',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(fontWeight: FontWeight.w600),
@@ -125,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        GradientText(
                           'Songs',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
@@ -137,18 +134,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context, count) {
                             if (count == null) return const SizedBox.shrink();
 
-                            return Text(
+                            return GradientText(
                               '$count',
                               style: Theme.of(context).textTheme.titleMedium,
                             );
                           },
                         ),
                         const SizedBox(width: 8),
-                        Assets.icons.vector.tinted(
-                          context,
-                          width: 24,
-                          height: 24,
-                        ),
+                        Assets.icons.vector2Svg.svg(width: 24, height: 24),
                       ],
                     ),
                     BlocBuilder<HomeScreenBloc, HomeScreenState>(

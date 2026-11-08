@@ -26,8 +26,11 @@ class $AssetsBrandGen {
   /// File path: assets/brand/logo_fa.png
   AssetGenImage get logoFa => const AssetGenImage('assets/brand/logo_fa.png');
 
+  /// File path: assets/brand/nava_bg.png
+  AssetGenImage get navaBg => const AssetGenImage('assets/brand/nava_bg.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [appIcon, logoEn, logoFa];
+  List<AssetGenImage> get values => [appIcon, logoEn, logoFa, navaBg];
 }
 
 class $AssetsIconsGen {
@@ -36,12 +39,22 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Add.svg
   SvgGenImage get add => const SvgGenImage('assets/icons/Add.svg');
 
+  /// File path: assets/icons/Add2.svg
+  SvgGenImage get add2 => const SvgGenImage('assets/icons/Add2.svg');
+
   /// File path: assets/icons/Categories.svg
   SvgGenImage get categories =>
       const SvgGenImage('assets/icons/Categories.svg');
 
+  /// File path: assets/icons/Categories2.svg
+  SvgGenImage get categories2 =>
+      const SvgGenImage('assets/icons/Categories2.svg');
+
   /// File path: assets/icons/Search.svg
   SvgGenImage get search => const SvgGenImage('assets/icons/Search.svg');
+
+  /// File path: assets/icons/Search2.svg
+  SvgGenImage get search2 => const SvgGenImage('assets/icons/Search2.svg');
 
   /// File path: assets/icons/Vector.svg
   SvgGenImage get vector => const SvgGenImage('assets/icons/Vector.svg');
@@ -67,11 +80,18 @@ class $AssetsIconsGen {
   AssetGenImage get profileImage =>
       const AssetGenImage('assets/icons/profile_image.jpg');
 
+  /// File path: assets/icons/vector2.svg.svg
+  SvgGenImage get vector2Svg =>
+      const SvgGenImage('assets/icons/vector2.svg.svg');
+
   /// List of all assets
   List<dynamic> get values => [
     add,
+    add2,
     categories,
+    categories2,
     search,
+    search2,
     vector,
     appIcon,
     cover,
@@ -79,6 +99,7 @@ class $AssetsIconsGen {
     logo,
     musicPlayer,
     profileImage,
+    vector2Svg,
   ];
 }
 

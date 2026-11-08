@@ -25,6 +25,16 @@ class SourceToggle extends StatelessWidget {
           GlassSegment(label: 'Online'),
         ],
         selectedIndex: selected == MusicSource.local ? 0 : 1,
+        selectedTextStyle: TextStyle(
+          fontWeight: FontWeight.w600,
+          foreground: Paint()
+            ..shader = const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFFE9DDFF), Color(0xFF9B6BFF), Color(0xFF7C3AED)],
+            ).createShader(const Rect.fromLTWH(0, 0, 60, 20)),
+        ),
+        unselectedTextStyle: const TextStyle(color: Colors.white70),
         onSegmentSelected: (i) =>
             onChanged(i == 0 ? MusicSource.local : MusicSource.online),
         indicatorSettings: LiquidGlassSettings(

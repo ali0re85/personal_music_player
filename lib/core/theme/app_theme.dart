@@ -28,16 +28,16 @@ class AppColors extends ThemeExtension<AppColors> {
 
   static const dark = AppColors(
     onMedia: Colors.white,
-    accent: Color(0xFFB39DDB),
+    accent: Color(0xFFA855F7),
     liked: Colors.redAccent,
     error: Colors.redAccent,
     scrim: Colors.black,
-    fallbackBackdrop: [Color(0xFF7E57C2), Color(0xFF4527A0), Color(0xFF1A237E)],
+    fallbackBackdrop:[Color(0xFF3B1A7A), Color(0xFF1A0B3D), Color(0xFF05030F)],
   );
 
   static final light = dark.copyWith(
     onMedia: const Color(0xFF121212),
-    accent: const Color(0xFF5E35B1),
+    accent: const Color(0xFF6D28D9),
   );
   @override
   AppColors copyWith({
