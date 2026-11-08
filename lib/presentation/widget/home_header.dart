@@ -41,17 +41,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                   child: AnimatedOpacity(
                     opacity: _isSearching ? 0 : 1,
                     duration: const Duration(milliseconds: 200),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Assets.icons.logo.tinted(context),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Music Player',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
+                    child: Assets.brand.logoFa.image(height: 36)
                   ),
                 ),
 

@@ -7,7 +7,6 @@ import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/presentation/logic/music_screen_bloc.dart';
 import 'package:music_player/presentation/widget/accent_builder.dart';
-import 'package:music_player/presentation/widget/equalizer_bars.dart';
 import 'package:music_player/presentation/widget/flowing_wave.dart';
 import 'package:music_player/presentation/widget/spinning_cover.dart';
 

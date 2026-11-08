@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
-import 'package:music_player/gen/assets.gen.dart';
+import 'package:music_player/presentation/widget/cover_placeholder.dart';
 import 'package:music_player/services/cover_service.dart';
 
 class TrackCover extends StatelessWidget {
@@ -22,7 +22,11 @@ class TrackCover extends StatelessWidget {
   final int cacheWidth;
 
   Widget _fallback() {
-    return Assets.icons.cover.image(width: width, height: height, fit: fit);
+    return SizedBox(
+      width: width,
+      height: height,
+      child: CoverPlaceholder(track: track),
+    );
   }
 
   @override
