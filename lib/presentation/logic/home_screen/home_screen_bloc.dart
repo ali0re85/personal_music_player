@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
 import 'package:music_player/domain/repository/music_repository.dart';
-import 'package:music_player/presentation/logic/music_source.dart';
+import 'package:music_player/domain/entity/music_source.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'home_screen_event.dart';

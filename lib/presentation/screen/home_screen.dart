@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:music_player/controller/player_controller.dart';
-import 'package:music_player/core/theme/tinted_svg.dart';
 import 'package:music_player/domain/repository/music_repository.dart';
+import 'package:music_player/domain/repository/playlist_repository.dart';
 import 'package:music_player/gen/assets.gen.dart';
 import 'package:music_player/locator.dart';
-import 'package:music_player/presentation/logic/home_screen_bloc.dart';
+import 'package:music_player/presentation/logic/home_screen/home_screen_bloc.dart';
+import 'package:music_player/presentation/logic/playlists/playlists_bloc.dart';
+import 'package:music_player/presentation/screen/playlist_screen.dart';
+import 'package:music_player/presentation/widget/create_playlist_dialog.dart';
 import 'package:music_player/presentation/widget/gradient_text.dart';
 import 'package:music_player/presentation/widget/home_background.dart';
 import 'package:music_player/presentation/widget/home_header.dart';
 import 'package:music_player/presentation/widget/mini_player.dart';
 import 'package:music_player/presentation/widget/music_screen_route.dart';
+import 'package:music_player/presentation/widget/playlist_picker.dart';
 import 'package:music_player/presentation/widget/source_toggle.dart';
+import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/presentation/widget/track_title.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,11 +30,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeScreenBloc(
-        offlineRepository: locator<MusicRepository>(instanceName: 'offline'),
-        onlineRepository: locator<MusicRepository>(instanceName: 'online'),
-      )..add(HomeScreenSongsRequested()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => HomeScreenBloc(
+            offlineRepository: locator<MusicRepository>(
+              instanceName: 'offline',
+            ),
+            onlineRepository: locator<MusicRepository>(instanceName: 'online'),
+          )..add(HomeScreenSongsRequested()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              PlaylistsBloc(locator<PlaylistRepository>())
+                ..add(PlaylistsStarted()),
+        ),
+      ],
 
       child: GlassScaffold(
         background: const HomeBackground(),
@@ -49,23 +65,35 @@ class _HomeScreenState extends State<HomeScreen> {
                       'Play Lists',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    GlassButton(
-                      width: 44,
-                      height: 44,
-                      iconSize: 24,
-                      icon: Assets.icons.add2.svg(width: 24, height: 24),
-                      onTap: () {},
+                    Builder(
+                      builder: (context) => GlassButton(
+                        width: 44,
+                        height: 44,
+                        iconSize: 24,
+                        icon: Assets.icons.add2.svg(width: 24, height: 24),
+                        onTap: () async {
+                          final name = await showCreatePlaylistDialog(context);
+                          if (name == null || !context.mounted) return;
+                          context.read<PlaylistsBloc>().add(
+                            PlaylistCreated(name),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
               SizedBox(
                 height: 178,
-                child: BlocBuilder<HomeScreenBloc, HomeScreenState>(
+                child: BlocBuilder<PlaylistsBloc, PlaylistsState>(
                   builder: (context, state) {
-                    if (state is HomeScreenInitial ||
-                        state is HomeScreenLoading) {
+                    if (state is! PlaylistsSuccess) {
                       return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final playlists = state.playlists;
+                    if (playlists.isEmpty) {
+                      return const Center(child: Text('No playlists yet'));
                     }
 
                     return ListView.separated(
@@ -77,38 +105,57 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       separatorBuilder: (context, index) =>
                           const SizedBox(width: 10),
-                      itemCount: 10,
+                      itemCount: playlists.length,
                       itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GlassContainer(
-                              width: 112,
-                              height: 112,
-                              padding: const EdgeInsets.all(6),
-                              shape: const LiquidRoundedSuperellipse(
-                                borderRadius: 20,
+                        final playlist = playlists[index];
+
+                        return GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                value: context.read<PlaylistsBloc>(),
+                                child: PlaylistScreen(playlistId: playlist.id),
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(14),
-                                child: Assets.icons.cover.image(
-                                  width: 96,
-                                  height: 96,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GlassContainer(
+                                width: 112,
+                                height: 112,
+                                padding: const EdgeInsets.all(6),
+                                shape: const LiquidRoundedSuperellipse(
+                                  borderRadius: 20,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(14),
+                                  child: playlist.tracks.isEmpty
+                                      ? Assets.icons.cover.image(
+                                          width: 96,
+                                          height: 96,
+                                        )
+                                      : TrackCover(
+                                          track: playlist.tracks.first,
+                                          width: 96,
+                                          height: 96,
+                                        ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            GradientText(
-                              'Play List',
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              '100 Tracks',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
+                              const SizedBox(height: 10),
+                              GradientText(
+                                playlist.name,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                '${playlist.tracks.length} Tracks',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
                         );
                       },
                     );
@@ -206,6 +253,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
                               return TrackTile(
                                 track: track,
+                                onLongPress: () async {
+                                  final playlistsState = context
+                                      .read<PlaylistsBloc>()
+                                      .state;
+                                  if (playlistsState is! PlaylistsSuccess)
+                                    return;
+
+                                  final playlistId = await showPlaylistPicker(
+                                    context,
+                                    playlistsState.playlists,
+                                  );
+                                  if (playlistId == null || !context.mounted)
+                                    return;
+
+                                  context.read<PlaylistsBloc>().add(
+                                    PlaylistTrackAdded(
+                                      playlistId,
+                                      track,
+                                      state.source,
+                                    ),
+                                  );
+                                },
                                 onTap: () {
                                   final controller = PlayerController.instance;
 

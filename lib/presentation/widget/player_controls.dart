@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:music_player/core/theme/app_theme.dart';
-import 'package:music_player/presentation/logic/music_screen_bloc.dart';
+import 'package:music_player/presentation/logic/music_screen/music_screen_bloc.dart';
 import 'package:music_player/presentation/widget/accent_builder.dart';
 import 'package:music_player/presentation/widget/play_pause_button.dart';
 

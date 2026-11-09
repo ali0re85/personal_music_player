@@ -1,3 +1,5 @@
+import 'package:music_player/domain/entity/music_source.dart';
+
 class MusicEntity {
   final String? coverImageFile;
   final String? coverImageUrl;
@@ -8,7 +10,7 @@ class MusicEntity {
   final String? path;
   final int id;
   final String? artist;
-
+  final MusicSource? source;
   MusicEntity({
     this.coverImageFile,
     this.coverImageUrl,
@@ -19,5 +21,6 @@ class MusicEntity {
     this.path,
     required this.id,
     this.artist,
+    this.source
   });
 }

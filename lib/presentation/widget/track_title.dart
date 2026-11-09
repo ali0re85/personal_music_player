@@ -6,10 +6,11 @@ import 'package:music_player/presentation/widget/accent_builder.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
 
 class TrackTile extends StatelessWidget {
-  const TrackTile({super.key, required this.track, required this.onTap});
+  const TrackTile({super.key, required this.track, required this.onTap,this.onLongPress});
 
   final MusicEntity track;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,7 @@ class TrackTile extends StatelessWidget {
 
   Widget _tile(BuildContext context, Color? accent) {
     return ListTile(
+      onLongPress: onLongPress,
       onTap: onTap,
       leading: Container(
         decoration: BoxDecoration(

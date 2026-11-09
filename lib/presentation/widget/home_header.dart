@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:music_player/gen/assets.gen.dart';
-import 'package:music_player/presentation/logic/home_screen_bloc.dart';
+import 'package:music_player/presentation/logic/home_screen/home_screen_bloc.dart';
 
 class HomeHeader extends StatefulWidget {
   const HomeHeader({super.key});

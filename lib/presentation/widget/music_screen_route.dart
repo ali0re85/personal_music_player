@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/core/theme/app_theme.dart';
-import 'package:music_player/presentation/logic/music_screen_bloc.dart';
+import 'package:music_player/presentation/logic/music_screen/music_screen_bloc.dart';
 import 'package:music_player/presentation/screen/music_screen.dart';
 
 /// مسیر باز شدن صفحه‌ی پلینگ (اسلاید از پایین + کشیدن به پایین برای بستن).

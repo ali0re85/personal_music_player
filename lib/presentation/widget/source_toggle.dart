@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
-import 'package:music_player/presentation/logic/music_source.dart';
+import 'package:music_player/domain/entity/music_source.dart';
 
 class SourceToggle extends StatelessWidget {
   final MusicSource selected;

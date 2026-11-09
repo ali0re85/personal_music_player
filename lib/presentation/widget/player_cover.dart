@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/controller/player_controller.dart';
 import 'package:music_player/core/theme/app_theme.dart';
 import 'package:music_player/domain/entity/music_entity.dart';
-import 'package:music_player/presentation/logic/music_screen_bloc.dart';
+import 'package:music_player/presentation/logic/music_screen/music_screen_bloc.dart';
 import 'package:music_player/presentation/widget/track_cover.dart';
 import 'package:music_player/services/audio_service.dart';
 
