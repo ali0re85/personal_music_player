@@ -87,6 +87,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 178,
                 child: BlocBuilder<PlaylistsBloc, PlaylistsState>(
                   builder: (context, state) {
+                    if (state is PlaylistsError) {
+                      return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text('Could not load playlists'),
+                            TextButton(
+                              onPressed: () => context
+                                  .read<PlaylistsBloc>()
+                                  .add(PlaylistsStarted()),
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                     if (state is! PlaylistsSuccess) {
                       return const Center(child: CircularProgressIndicator());
                     }

@@ -27,7 +27,10 @@ class PlaylistsBloc extends Bloc<PlaylistsEvent, PlaylistsState> {
     return emit.forEach<List<PlaylistEntity>>(
       _repository.watchPlaylists(),
       onData: (playlists) => PlaylistsSuccess(playlists),
-      onError: (error, _) => PlaylistsError(error.toString()),
+      onError: (error, stackTrace) {
+        debugPrint('Playlists stream error: $error');
+        return PlaylistsError(error.toString());
+      },
     );
   }
 

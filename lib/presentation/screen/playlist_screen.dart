@@ -5,6 +5,7 @@ import 'package:music_player/controller/player_controller.dart';
 import 'package:music_player/domain/entity/playlist_entity.dart';
 import 'package:music_player/presentation/logic/playlists/playlists_bloc.dart';
 import 'package:music_player/presentation/widget/create_playlist_dialog.dart';
+import 'package:music_player/presentation/widget/glass_confirm_dialog.dart';
 import 'package:music_player/presentation/widget/gradient_text.dart';
 import 'package:music_player/presentation/widget/home_background.dart';
 import 'package:music_player/presentation/widget/mini_player.dart';
@@ -26,6 +27,21 @@ class PlaylistScreen extends StatelessWidget {
         bottom: false,
         child: BlocBuilder<PlaylistsBloc, PlaylistsState>(
           builder: (context, state) {
+            if (state is PlaylistsError) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Could not load playlists'),
+                    TextButton(
+                      onPressed: () =>
+                          context.read<PlaylistsBloc>().add(PlaylistsStarted()),
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              );
+            }
             if (state is! PlaylistsSuccess) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -59,12 +75,21 @@ class PlaylistScreen extends StatelessWidget {
                       ),
                       Text('${tracks.length} Tracks'),
                       const SizedBox(width: 12),
-                      GlassButton(
-                        width: 44,
-                        height: 44,
-                        iconSize: 20,
+                      GlassPullDownButton(
                         icon: const Icon(Icons.more_horiz_rounded),
-                        onTap: () => _showMenu(context, playlist),
+                        items: [
+                          GlassMenuItem(
+                            title: 'Rename',
+                            icon: const Icon(Icons.edit_rounded),
+                            onTap: () => _rename(context, playlist),
+                          ),
+                          GlassMenuItem(
+                            title: 'Delete playlist',
+                            icon: const Icon(Icons.delete_rounded),
+                            isDestructive: true,
+                            onTap: () => _delete(context, playlist),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -89,27 +114,13 @@ class PlaylistScreen extends StatelessWidget {
                                 final source = track.source;
                                 if (source == null) return;
 
-                                final confirmed = await showDialog<bool>(
-                                  context: context,
-                                  builder: (dialogContext) => AlertDialog(
-                                    title: const Text('Remove from playlist?'),
-                                    content: Text(track.title),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(dialogContext, false),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(dialogContext, true),
-                                        child: const Text('Remove'),
-                                      ),
-                                    ],
-                                  ),
+                                final confirmed = await showGlassConfirmDialog(
+                                  context,
+                                  title: 'Remove from playlist?',
+                                  message: track.title,
+                                  confirmLabel: 'Remove',
                                 );
-                                if (confirmed != true || !context.mounted)
-                                  return;
+                                if (!confirmed || !context.mounted) return;
 
                                 context.read<PlaylistsBloc>().add(
                                   PlaylistTrackRemoved(
@@ -140,55 +151,22 @@ class PlaylistScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _showMenu(BuildContext context, PlaylistEntity playlist) async {
-    final action = await showModalBottomSheet<String>(
-      context: context,
-      builder: (sheetContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.edit_rounded),
-              title: const Text('Rename'),
-              onTap: () => Navigator.pop(sheetContext, 'rename'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete_rounded),
-              title: const Text('Delete playlist'),
-              onTap: () => Navigator.pop(sheetContext, 'delete'),
-            ),
-          ],
-        ),
-      ),
+  Future<void> _rename(BuildContext context, PlaylistEntity playlist) async {
+    final name = await showRenamePlaylistDialog(context, playlist.name);
+    if (name == null || !context.mounted) return;
+    context.read<PlaylistsBloc>().add(PlaylistRenamed(playlist.id, name));
+  }
+
+  Future<void> _delete(BuildContext context, PlaylistEntity playlist) async {
+    final confirmed = await showGlassConfirmDialog(
+      context,
+      title: 'Delete playlist?',
+      message: playlist.name,
+      confirmLabel: 'Delete',
     );
-    if (action == null || !context.mounted) return;
+    if (!confirmed || !context.mounted) return;
 
-    if (action == 'rename') {
-      final name = await showRenamePlaylistDialog(context, playlist.name);
-      if (name == null || !context.mounted) return;
-      context.read<PlaylistsBloc>().add(PlaylistRenamed(playlist.id, name));
-    } else if (action == 'delete') {
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: const Text('Delete playlist?'),
-          content: Text(playlist.name),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext, false),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext, true),
-              child: const Text('Delete'),
-            ),
-          ],
-        ),
-      );
-      if (confirmed != true || !context.mounted) return;
-
-      context.read<PlaylistsBloc>().add(PlaylistDeleted(playlist.id));
-      Navigator.pop(context);
-    }
+    context.read<PlaylistsBloc>().add(PlaylistDeleted(playlist.id));
+    Navigator.pop(context);
   }
 }
